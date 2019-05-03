@@ -1,5 +1,11 @@
-const pkg = require('./package')
-
+/*
+ * @Description: file content
+ * @Author: chenchen
+ * @Date: 2019-05-02 19:47:28
+ * @LastEditTime: 2019-05-02 20:46:51
+ */
+const pkg = require('./package');
+var TransformModulesPlugin = require('webpack-transform-modules-plugin');
 
 module.exports = {
   mode: 'universal',
@@ -34,6 +40,7 @@ module.exports = {
   ** Plugins to load before mounting the App
   */
   plugins: [
+    '~/plugins/cube.js',
   ],
 
   /*
@@ -50,6 +57,10 @@ module.exports = {
     ** You can extend webpack config here
     */
     extend(config, ctx) {
+
+      config.resolve.alias['cube-ui'] = 'cube-ui/lib';
+
+      config.plugins.push(new TransformModulesPlugin())
     }
   }
 }

@@ -1,3 +1,9 @@
+<!--
+ * @Description: file content
+ * @Author: chenchen
+ * @Date: 2019-05-02 19:47:28
+ * @LastEditTime: 2019-05-03 17:52:08
+ -->
 <template>
   <section class="container">
     <div>
@@ -19,6 +25,7 @@
           target="_blank"
           class="button--grey"
         >GitHub</a>
+        <cube-button @click="submit">Button</cube-button>
       </div>
     </div>
   </section>
@@ -30,6 +37,11 @@ import Logo from '~/components/Logo.vue'
 export default {
   components: {
     Logo
+  },methods:{
+    submit(){
+     this.$store.dispatch("user/logout",123)
+      
+    }
   }
 }
 </script>
@@ -51,7 +63,7 @@ export default {
   font-weight: 300;
   font-size: 100px;
   color: #35495e;
-  letter-spacing: 1px;
+  letter-spacing: 10px;
 }
 
 .subtitle {
