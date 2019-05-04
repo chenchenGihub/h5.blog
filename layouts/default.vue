@@ -43,6 +43,9 @@ html {
 }
 .app {
   padding-top: 50px;
+  height: 100vh;
+  width: 100vw;
+  overflow: hidden;
   .fa {
     // font-size: 1.5rem;
     // color: white;
