@@ -2,7 +2,7 @@
  * @Description: file content
  * @Author: chenchen
  * @Date: 2019-05-02 19:47:28
- * @LastEditTime: 2019-05-02 20:46:51
+ * @LastEditTime: 2019-05-03 22:51:36
  */
 const pkg = require('./package');
 var TransformModulesPlugin = require('webpack-transform-modules-plugin');
@@ -34,13 +34,17 @@ module.exports = {
   ** Global CSS
   */
   css: [
+    '@fortawesome/fontawesome-free/css/all.css',
   ],
 
   /*
   ** Plugins to load before mounting the App
   */
   plugins: [
-    '~/plugins/cube.js',
+    {
+      src:'~/plugins/cube.js',
+      ssr: true
+    },
   ],
 
   /*

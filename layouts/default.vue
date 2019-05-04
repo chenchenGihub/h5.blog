@@ -1,13 +1,38 @@
+<!--
+ * @Description: 布局
+ * @Author: chenchen
+ * @Date: 2019-05-02 19:47:28
+ * @LastEditTime: 2019-05-04 11:59:46
+ -->
 <template>
-  <div>
+  <div class="app">
     <nuxt />
+    <TabBar></TabBar>
   </div>
 </template>
+<script>
+import TabBar from "~/components/TabBar.vue";
 
-<style>
+export default {
+  components: {
+    TabBar,
+  
+  },
+  data() {
+    return {};
+  },
+  methods: {
+    goback() {
+      this.$router.go(-1);
+    }
+  }
+};
+</script>
+
+<style lang="scss" scoped>
 html {
-  font-family: 'Source Sans Pro', -apple-system, BlinkMacSystemFont, 'Segoe UI',
-    Roboto, 'Helvetica Neue', Arial, sans-serif;
+  font-family: "Source Sans Pro", -apple-system, BlinkMacSystemFont, "Segoe UI",
+    Roboto, "Helvetica Neue", Arial, sans-serif;
   font-size: 16px;
   word-spacing: 1px;
   -ms-text-size-adjust: 100%;
@@ -16,40 +41,18 @@ html {
   -webkit-font-smoothing: antialiased;
   box-sizing: border-box;
 }
+.app {
+  padding-top: 50px;
+  .fa {
+    // font-size: 1.5rem;
+    // color: white;
+  }
+}
 
 *,
 *:before,
 *:after {
   box-sizing: border-box;
   margin: 0;
-}
-
-.button--green {
-  display: inline-block;
-  border-radius: 4px;
-  border: 1px solid #3b8070;
-  color: #3b8070;
-  text-decoration: none;
-  padding: 10px 30px;
-}
-
-.button--green:hover {
-  color: #fff;
-  background-color: #3b8070;
-}
-
-.button--grey {
-  display: inline-block;
-  border-radius: 4px;
-  border: 1px solid #35495e;
-  color: #35495e;
-  text-decoration: none;
-  padding: 10px 30px;
-  margin-left: 15px;
-}
-
-.button--grey:hover {
-  color: #fff;
-  background-color: #35495e;
 }
 </style>

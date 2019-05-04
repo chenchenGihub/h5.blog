@@ -2,54 +2,24 @@
  * @Description: 主页
  * @Author: chenchen
  * @Date: 2019-05-02 19:47:28
- * @LastEditTime: 2019-05-04 12:04:19
+ * @LastEditTime: 2019-05-03 21:53:11
  -->
 <template>
-<div>
-  <Header>
-    
-    <template>
-      <div>
-        主页
-      </div>
-    </template>
-   
-  </Header>
   <section class="container">
-
     <div>
-      <logo />
-      <h1 class="title">
-        h5.blog
-      </h1>
-      <h2 class="subtitle">
-        h5版blog
-      </h2>
-      <div class="links">
-        <a
-          href="https://nuxtjs.org/"
-          target="_blank"
-          class="button--green"
-        >Documentation</a>
-        <a
-          href="https://github.com/nuxt/nuxt.js"
-          target="_blank"
-          class="button--grey"
-        >GitHub</a>
-        <cube-button @click="submit">Button</cube-button>
-      </div>
+     
+        <cube-button @click="submit">我的</cube-button>
+     
     </div>
   </section>
-  </div>
 </template>
 
 <script>
 import Logo from "~/components/Logo.vue";
-import Header from "~/components/Header.vue";
+
 export default {
   components: {
-    Logo,
-    Header
+    Logo
   },
   methods: {
     submit() {
@@ -59,9 +29,9 @@ export default {
   async asyncData(context) {
     // 请检查您是否在服务器端
     // 使用 req 和 res
-
+  
     // console.log(context);
-
+    
     if (process.server) {
       // return { host: req.headers.host };
     }
@@ -71,11 +41,10 @@ export default {
 };
 </script>
 
-<style lang="scss" scoded>
+<style>
 .container {
   margin: 0 auto;
-  height: 100%;
-  width: 100%;
+  height: 100vh;
   display: flex;
   justify-content: center;
   align-items: center;

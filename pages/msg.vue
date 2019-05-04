@@ -2,55 +2,56 @@
  * @Description: 主页
  * @Author: chenchen
  * @Date: 2019-05-02 19:47:28
- * @LastEditTime: 2019-05-04 12:04:19
+ * @LastEditTime: 2019-05-04 12:00:14
  -->
 <template>
-<div>
-  <Header>
-    
-    <template>
-      <div>
-        主页
-      </div>
-    </template>
-   
-  </Header>
   <section class="container">
-
-    <div>
-      <logo />
-      <h1 class="title">
-        h5.blog
-      </h1>
-      <h2 class="subtitle">
-        h5版blog
-      </h2>
-      <div class="links">
-        <a
-          href="https://nuxtjs.org/"
-          target="_blank"
-          class="button--green"
-        >Documentation</a>
-        <a
-          href="https://github.com/nuxt/nuxt.js"
-          target="_blank"
-          class="button--grey"
-        >GitHub</a>
-        <cube-button @click="submit">Button</cube-button>
-      </div>
-    </div>
+    <cube-slide
+      ref="slide"
+      :data="items"
+      :initial-index="0"
+      :loop="false"
+      :auto-play="false"
+      :showDots='false'
+      
+    >
+      <cube-slide-item
+        v-for="(item, index) in items"
+        :key="index"
+        @click.native="clickHandler(item, index)"
+      >
+        <a :href="item.url">
+          <img :src="item.image">
+        </a>
+      </cube-slide-item>
+    </cube-slide>
   </section>
-  </div>
 </template>
 
 <script>
-import Logo from "~/components/Logo.vue";
-import Header from "~/components/Header.vue";
 export default {
-  components: {
-    Logo,
-    Header
+  data() {
+    return {
+      items: [
+        {
+          url: "http://www.didichuxing.com/",
+          image:
+            "//webapp.didistatic.com/static/webapp/shield/cube-ui-examples-slide01.png"
+        },
+        {
+          url: "http://www.didichuxing.com/",
+          image:
+            "//webapp.didistatic.com/static/webapp/shield/cube-ui-examples-slide02.png"
+        },
+        {
+          url: "http://www.didichuxing.com/",
+          image:
+            "//webapp.didistatic.com/static/webapp/shield/cube-ui-examples-slide03.png"
+        }
+      ]
+    };
   },
+  components: {},
   methods: {
     submit() {
       this.$store.dispatch("user/logout", 123);
@@ -71,7 +72,7 @@ export default {
 };
 </script>
 
-<style lang="scss" scoded>
+<style scoped lang="scss">
 .container {
   margin: 0 auto;
   height: 100%;
