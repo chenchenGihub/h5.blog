@@ -2,7 +2,7 @@
  * @Description: file content
  * @Author: chenchen
  * @Date: 2019-05-02 19:47:28
- * @LastEditTime: 2019-05-03 22:51:36
+ * @LastEditTime: 2019-05-07 11:29:37
  */
 const pkg = require('./package');
 var TransformModulesPlugin = require('webpack-transform-modules-plugin');
@@ -34,6 +34,9 @@ module.exports = {
   ** Global CSS
   */
   css: [
+    'quill/dist/quill.bubble.css',
+    'quill/dist/quill.core.css',
+    'highlight.js/styles/xcode.css',
     '@fortawesome/fontawesome-free/css/all.css',
   ],
 
@@ -45,13 +48,19 @@ module.exports = {
       src:'~/plugins/cube.js',
       ssr: true
     },
+    { src: '~plugins/nuxt-quill-plugin.js', ssr: true },
   ],
 
   /*
   ** Nuxt.js modules
   */
   modules: [
+    '@nuxtjs/axios',
+    
   ],
+  axios: {
+    // proxyHeaders: false
+  },
 
   /*
   ** Build configuration

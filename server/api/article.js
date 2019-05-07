@@ -2,7 +2,7 @@
  * @Description: 博客文章api
  * @Author: chenchen
  * @Date: 2019-04-12 20:07:01
- * @LastEditTime: 2019-04-23 16:20:28
+ * @LastEditTime: 2019-05-07 09:57:18
  */
 
 const { Router } = require('express');
@@ -20,7 +20,7 @@ const {
     errorMsg
 } = require('../error.conf')
 
-router.all("/article", auths)
+// router.all("/article", auths)
 
 router.get('/article', async (req, res, next) => {
 
@@ -51,6 +51,7 @@ router.get('/article', async (req, res, next) => {
 
     }
 
+// console.log(articles);
 
 
     res.json({

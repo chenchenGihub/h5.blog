@@ -2,7 +2,7 @@
  * @Description: file content
  * @Author: chenchen
  * @Date: 2019-05-03 20:26:12
- * @LastEditTime: 2019-05-04 09:33:34
+ * @LastEditTime: 2019-05-07 10:13:59
  -->
 <template>
   <div class="tabbar">
@@ -101,6 +101,7 @@ export default {
   bottom: 0px;
   width: 100%;
   background: #eee;
+  z-index: 1;
   .cube-tab {
     display: flex;
     flex-direction: column;

@@ -2,14 +2,12 @@
  * @Description: 主页
  * @Author: chenchen
  * @Date: 2019-05-02 19:47:28
- * @LastEditTime: 2019-05-03 21:53:11
+ * @LastEditTime: 2019-05-07 10:50:40
  -->
 <template>
   <section class="container">
     <div>
-     
         <cube-button @click="submit">我的</cube-button>
-     
     </div>
   </section>
 </template>

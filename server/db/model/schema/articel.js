@@ -2,7 +2,7 @@
  * @Description: 文章原型
  * @Author: chenchen
  * @Date: 2019-04-12 20:07:01
- * @LastEditTime: 2019-04-23 17:30:49
+ * @LastEditTime: 2019-05-07 09:46:19
  */
 const mongoose = require('mongoose')
 
@@ -15,7 +15,12 @@ const {
 } = require('./schema.conf')
 
 const ArticelSchema = new Schema({
-  authorId: { type: String },
+  user: {
+    id:String,
+    name:String,
+    avatar:String,
+    description:String
+   },
   title: ARTICEL_SCHEMA.titleType,
   text: ARTICEL_SCHEMA.contentType,
   html: ARTICEL_SCHEMA.htmlType,

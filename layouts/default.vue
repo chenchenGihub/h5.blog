@@ -2,20 +2,20 @@
  * @Description: 布局
  * @Author: chenchen
  * @Date: 2019-05-02 19:47:28
- * @LastEditTime: 2019-05-04 11:59:46
+ * @LastEditTime: 2019-05-07 10:12:11
  -->
 <template>
   <div class="app">
     <nuxt />
-    <TabBar></TabBar>
+   
   </div>
 </template>
 <script>
-import TabBar from "~/components/TabBar.vue";
+
 
 export default {
   components: {
-    TabBar,
+   
   
   },
   data() {

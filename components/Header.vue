@@ -2,7 +2,7 @@
  * @Description: 头部容器
  * @Author: chenchen
  * @Date: 2019-05-03 21:57:58
- * @LastEditTime: 2019-05-04 12:04:53
+ * @LastEditTime: 2019-05-07 11:56:50
  -->
 <template>
   <div class="header">
@@ -26,12 +26,19 @@ export default {};
   height: 50px;
   width: 100vw;
   background: rgb(248, 152, 26);
-  position: fixed;
+  
   top: 0px;
   display: flex;
   justify-content: space-between;
   align-items: center;
   color: white;
+  .center-b{
+    height: 100%;
+    width: 70%;
+     display: flex;
+      justify-content: center;
+      align-items: center;
+  }
   .left-b,.right-b{
       width: 15%;
       height: 100%;
