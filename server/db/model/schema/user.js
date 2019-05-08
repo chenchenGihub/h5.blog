@@ -2,7 +2,7 @@
  * @Description: 用户原型
  * @Author: chenchen
  * @Date: 2019-04-12 20:07:01
- * @LastEditTime: 2019-04-23 17:28:36
+ * @LastEditTime: 2019-05-08 10:26:27
  */
 const mongoose = require('mongoose')
 
@@ -15,6 +15,7 @@ const { USER_SCHEMA } = require('./schema.conf')
 const UserSchema = new Schema({
   avatarUrl:USER_SCHEMA.avatarUrlType,
   userName: USER_SCHEMA.userNameType,
+  description: USER_SCHEMA.descriptionType,
   email: USER_SCHEMA.emailType,
   password: USER_SCHEMA.passwordType,
   token: USER_SCHEMA.tokenType,

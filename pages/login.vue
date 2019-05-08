@@ -2,13 +2,23 @@
  * @Description: file content
  * @Author: chenchen
  * @Date: 2019-05-07 09:56:31
- * @LastEditTime: 2019-05-07 17:51:24
+ * @LastEditTime: 2019-05-08 09:46:37
  -->
 <template>
   <CubePage
     type="scroll-view"
     class="mainpage"
   >
+
+    <!-- <cube-form
+      :model="model"
+      :schema="schema"
+      :immediate-validate="false"
+      :options="options"
+      @validate="validateHandler"
+      @submit="submitHandler"
+      @reset="resetHandler"
+    > -->
 
     <template slot="content">
 
@@ -34,7 +44,10 @@
         </section>
 
         <div class="btn-group">
-          <cube-button @click="submit">登录</cube-button>
+          <cube-button
+            :disabled="!loginForm.password || !loginForm.userName "
+            @click="submit"
+          >登录</cube-button>
         </div>
 
         <section class="other-operate">
@@ -74,20 +87,25 @@
 
         <section class="agree-b">
           <cube-checkbox
-          class="with-click"
-           
+            class="with-click"
             v-model="loginForm.checked"
             position="left"
             shape="square"
             :hollow-style="true"
           >
-            请勾选代表你同意 <a href="javascript:;" @click.stop="check(0)">用户协议</a> 和 <a href="javascript:;" @click.stop="check(1)">隐私政策</a>
+            请勾选代表你同意 <a
+              href="javascript:;"
+              @click.stop="check(0)"
+            >用户协议</a> 和 <a
+              href="javascript:;"
+              @click.stop="check(1)"
+            >隐私政策</a>
           </cube-checkbox>
-
         </section>
 
       </main>
     </template>
+    <!-- </cube-form> -->
 
   </CubePage>
 </template>
@@ -111,8 +129,30 @@ export default {
     };
   },
   methods: {
-    submit() {
-      console.log(this.loginForm);
+    async submit() {
+      if (!this.loginForm.checked) {
+        const toast = this.$createToast({
+         type: 'txt',
+          txt: "请勾选协议"
+        });
+        toast.show();
+
+        return
+      }
+
+      await this.$store.dispatch("user/login", this.loginForm);
+
+      console.log(this.$store.state.user.userInfo);
+
+      if (this.$store.state.user.userInfo.success) {
+        this.$router.go(-1);
+      }else{
+         const toast = this.$createToast({
+         type: 'txt',
+          txt: `${this.$store.state.user.userInfo.errorTxt}`
+        });
+        toast.show();
+      }
     },
     check(e) {
       console.log(222);

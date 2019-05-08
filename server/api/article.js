@@ -2,7 +2,7 @@
  * @Description: 博客文章api
  * @Author: chenchen
  * @Date: 2019-04-12 20:07:01
- * @LastEditTime: 2019-05-07 09:57:18
+ * @LastEditTime: 2019-05-08 15:28:59
  */
 
 const { Router } = require('express');
@@ -51,7 +51,7 @@ router.get('/article', async (req, res, next) => {
 
     }
 
-// console.log(articles);
+    // console.log(articles);
 
 
     res.json({
@@ -65,8 +65,10 @@ router.get('/article', async (req, res, next) => {
 
 router.post("/publishArticle", async (req, res, next) => {
     let user, article;
-    try {
 
+    console.log(req.body);
+
+    try {
         user = await User.findById(req.body.id);
 
         if (!user) {
@@ -79,6 +81,8 @@ router.post("/publishArticle", async (req, res, next) => {
         }
 
     } catch (error) {
+
+
         res.json({
             success: false,
             data: null,
@@ -88,9 +92,13 @@ router.post("/publishArticle", async (req, res, next) => {
     }
 
     article = new Article;
-    article.authorId = req.body.id;
+    article.user.id = req.body.id;
+    article.user.name = user.userName;
+    article.user.avatar = user.avatarUrl;
+    article.user.description = user.description;
     article.title = req.body.title;
     article.text = req.body.text;
+    article.imgs = req.body.imgs;
     article.html = req.body.html;
 
     try {
@@ -118,6 +126,51 @@ router.post("/publishArticle", async (req, res, next) => {
         }
 
     } catch (error) {
+        console.log(error);
+
+        res.json({
+            success: false,
+            data: null,
+            code: errorCode.DATABASE_ERROR,
+            msg: errorMsg.DATABASE_ERROR
+        })
+
+    }
+
+
+})
+
+
+router.get('/getSingleArticle', async (req, res, next) => {
+    const { id } = req.query;
+    let article, user, authorId;
+    try {
+        article = await Article.findById(id, "title text html user");
+
+        if (!article) {
+            return res.json({
+                success: false,
+                data: null,
+                code: errorCode.ARTICEL_NOT_EXSIT,
+                msg: errorMsg.ARTICEL_NOT_EXSIT
+            })
+        }
+
+
+
+        if (article.user.id) {
+
+
+            user = await User.findById({ _id: article.user.id }, "_id avatarUrl userName description");
+
+
+
+        }
+
+
+
+
+    } catch (error) {
 
         console.log(error);
 
@@ -130,58 +183,16 @@ router.post("/publishArticle", async (req, res, next) => {
         })
     }
 
-
-})
-
-
-router.get('/getSingleArticle', async (req, res, next) => {
-    const { id } = req.query;
-    let article,user,authorId;
-    try {
-        article = await Article.findById(id,"title text html authorId");
-
-        if (!article) {
-           return res.json({
-                success:false,
-                data:null,
-                code:errorCode.ARTICEL_NOT_EXSIT,
-                msg:errorMsg.ARTICEL_NOT_EXSIT
-            })
-        }
-
-       if (article.authorId) {
-          
-           
-           user = await User.findById({_id:article.authorId})
-       }
-
-     
-       
-
-    } catch (error) {
-
-        console.log(error);
-        
-
-        res.json({
-            success:false,
-            data:null,
-            code:errorCode.DATABASE_ERROR,
-            msg:errorMsg.DATABASE_ERROR
-        })
-    }
-
     res.json({
-        success:true,
-        data:{
-            title:article.title,
-            text:article.text,
-            html:article.html,
-            author:user.userName,
-            avatarUrl:user.avatarUrl,
+        success: true,
+        data: {
+            title: article.title,
+            text: article.text,
+            html: article.html,
+            author: user
         },
-        code:null,
-        msg:null
+        code: null,
+        msg: null
     })
 })
 

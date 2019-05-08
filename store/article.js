@@ -2,8 +2,10 @@
  * @Description: 文章的状态管理
  * @Author: chenchen
  * @Date: 2019-03-28 19:55:16
- * @LastEditTime: 2019-04-23 16:23:38
+ * @LastEditTime: 2019-05-08 10:48:39
  */
+import Cookie from 'js-cookie';
+
 export const state = () => ({
   articelListRes: {
     articelList:[],
@@ -55,6 +57,12 @@ export const actions = {
     }
   },
   async publishArticle({ commit }, params) {
+
+    
+    params.id=Cookie.get("id")
+
+    console.log(params);
+    
     const data = await this.$axios.$post('/api/publishArticle',params)
     commit('publishArticle', data)
   },

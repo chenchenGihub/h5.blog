@@ -2,7 +2,7 @@
  * @Description: file content
  * @Author: chenchen
  * @Date: 2019-04-21 22:01:46
- * @LastEditTime: 2019-05-07 16:18:28
+ * @LastEditTime: 2019-05-08 11:11:00
  -->
 <template>
     <section class="container"
@@ -95,6 +95,9 @@ export default {
                 let fileUrl = res.requestUrls[0]    
                 //将url插入到富文本中
                 if (fileUrl !== null && fileUrl.length > 0) {
+
+                    this.$emit("getImgs",fileUrl);
+
                     //光标位置
                     let cursorAddRange = this.myQuillEditor.getSelection();
                     //插入内容

@@ -2,7 +2,7 @@
  * @Description: file content
  * @Author: chenchen
  * @Date: 2019-05-02 19:47:28
- * @LastEditTime: 2019-05-07 11:29:37
+ * @LastEditTime: 2019-05-08 09:37:27
  */
 const pkg = require('./package');
 var TransformModulesPlugin = require('webpack-transform-modules-plugin');
@@ -48,6 +48,7 @@ module.exports = {
       src:'~/plugins/cube.js',
       ssr: true
     },
+    '~/plugins/axios',
     { src: '~plugins/nuxt-quill-plugin.js', ssr: true },
   ],
 
@@ -56,7 +57,6 @@ module.exports = {
   */
   modules: [
     '@nuxtjs/axios',
-    
   ],
   axios: {
     // proxyHeaders: false

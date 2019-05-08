@@ -2,7 +2,7 @@
  * @Description: 用户相关的api
  * @Author: chenchen
  * @Date: 2019-04-12 20:07:01
- * @LastEditTime: 2019-04-28 01:11:41
+ * @LastEditTime: 2019-05-08 09:30:19
  */
 const {
   Router
@@ -73,6 +73,9 @@ router.put('/login', async (req, res, next) => {
     userName,
     password
   } = req.body;
+
+  // console.log(req);
+  
 
 
   /**

@@ -2,13 +2,15 @@
  * @Description: 状态管理
  * @Author: chenchen
  * @Date: 2019-03-28 19:55:16
- * @LastEditTime: 2019-05-03 17:53:21
+ * @LastEditTime: 2019-05-08 10:45:57
  */
+import Cookie from 'js-cookie';
 const defaultUserinfo = {
   success: false,
   avatarUrl: '',
   userName: '',
-  id: ''
+  id: '',
+  errorTxt:''
 }
 export const state = () => ({
   registerState: {
@@ -29,17 +31,23 @@ export const mutations = {
     state.checknameState.success = text.success
   },
   login(state, payload) {
+    
+    console.log(payload);
 
     state.userInfo.success = payload.success;
     if (state.userInfo.success) {
       state.userInfo.avatarUrl = payload.data.avatarUrl;
       state.userInfo.userName = payload.data.userName;
       state.userInfo.id = payload.data._id;
-      // state.userInfo.token = payload.data.token
-      sessionStorage.setItem('token',payload.data.token)
+     
+      Cookie.set('auth',payload.data.token);
+      Cookie.set("id",payload.data._id)
+      
+
     } else {
       state.userInfo = {
-        ...defaultUserinfo
+        ...defaultUserinfo,
+        errorTxt:payload.msg
       }
     }
 
@@ -86,6 +94,8 @@ export const actions = {
   }, q) {
 
     const data = await this.$axios.$put('/api/login', q);
+
+
 
     commit("login", data);
 

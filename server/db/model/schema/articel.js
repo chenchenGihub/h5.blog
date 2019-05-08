@@ -2,7 +2,7 @@
  * @Description: 文章原型
  * @Author: chenchen
  * @Date: 2019-04-12 20:07:01
- * @LastEditTime: 2019-05-07 09:46:19
+ * @LastEditTime: 2019-05-08 11:06:45
  */
 const mongoose = require('mongoose')
 
@@ -23,6 +23,7 @@ const ArticelSchema = new Schema({
    },
   title: ARTICEL_SCHEMA.titleType,
   text: ARTICEL_SCHEMA.contentType,
+  imgs:ARTICEL_SCHEMA.imgType,
   html: ARTICEL_SCHEMA.htmlType,
   hidden: ARTICEL_SCHEMA.hiddenType,
   meta: {

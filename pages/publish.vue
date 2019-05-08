@@ -2,7 +2,7 @@
  * @Description: file content
  * @Author: chenchen
  * @Date: 2019-05-07 09:56:31
- * @LastEditTime: 2019-05-07 17:12:36
+ * @LastEditTime: 2019-05-08 11:11:56
  -->
 <template>
   <CubePage
@@ -29,6 +29,7 @@
         ref="Quilleditor"
         @editorContent="editorContent"
         @editorContentText="editorContentText"
+        @getImgs="getImgs"
       ></Quilleditor>
       
     </template>
@@ -56,7 +57,8 @@ export default {
       contentForm: {
         title: "",
         text: "",
-        html: ""
+        html: "",
+        imgs:[]
       }
     };
   },
@@ -67,9 +69,18 @@ export default {
     editorContentText(t) {
       this.contentForm.text = t;
     },
-    submit(){
-      console.log(this.contentForm);
-      
+    getImgs(img){
+      this.contentForm.imgs.push(img)
+    },
+    async submit(){
+    
+    const data =  await this.$store.dispatch("article/publishArticle", {...this.contentForm});
+
+    let success = this.$store.state.article.publishArticleRes.success;
+
+      if (success) {
+        this.$router.push('/');
+      }
     }
   }
 };
