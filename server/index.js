@@ -2,8 +2,9 @@
  * @Description: file content
  * @Author: chenchen
  * @Date: 2019-04-10 18:50:38
- * @LastEditTime: 2019-04-23 14:30:23
+ * @LastEditTime: 2019-05-09 09:40:20
  */
+const http = require('http')
 const express = require('express')
 const consola = require('consola')
 const mongoose = require('mongoose')
@@ -72,10 +73,14 @@ async function start() {
   },api)
 
   // Give nuxt middleware to express
-  app.use(nuxt.render)
+  app.use(nuxt.render);
+
+  const server = http.createServer(app)
+  const io = require('socket.io').listen(server)
+
 
   // Listen the server
-  app.listen(port, host)
+  server.listen(port, host)
 
   consola.ready({
     message: `Server listening on http://${host}:${port}`,

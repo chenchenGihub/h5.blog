@@ -2,7 +2,7 @@
  * @Description: file content
  * @Author: chenchen
  * @Date: 2019-05-07 09:56:31
- * @LastEditTime: 2019-05-08 09:46:37
+ * @LastEditTime: 2019-05-09 11:41:05
  -->
 <template>
   <CubePage
@@ -142,10 +142,12 @@ export default {
 
       await this.$store.dispatch("user/login", this.loginForm);
 
-      console.log(this.$store.state.user.userInfo);
-
       if (this.$store.state.user.userInfo.success) {
+
+        sessionStorage.setItem("user",JSON.stringify(this.$store.state.user.userInfo))
+
         this.$router.go(-1);
+        
       }else{
          const toast = this.$createToast({
          type: 'txt',

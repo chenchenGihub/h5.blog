@@ -2,7 +2,7 @@
  * @Description: file content
  * @Author: chenchen
  * @Date: 2019-05-07 09:56:31
- * @LastEditTime: 2019-05-08 18:01:59
+ * @LastEditTime: 2019-05-10 00:32:37
  -->
 <template>
   <CubePage
@@ -54,13 +54,77 @@
                 v-html="content.html"
               ></article>
               <div class="seperater"></div>
-              <ul class="imgs-wrapper">
+              <ul class="comment-wrapper">
                 <li
                   v-for="(item, index) in comments"
                   :key="index"
-                  class="imgs-item"
+                  class="comment-item"
                 >
-                  {{item.comment}}
+                  <main class="comment-b">
+                    <aside>
+                      <img
+                        :src="item.user.avatar"
+                        alt=""
+                        srcset=""
+                      >
+                    </aside>
+                    <section class="comment-u-b">
+                      <div class="comment-u">
+                        <strong>{{item.user.userName}}</strong>
+                        <div
+                          class="author-txt"
+                          v-if="item.user.isAuthor"
+                        >作者</div>
+                        <!-- <i>{{item.user.userName}}</i> -->
+                      </div>
+                      <article>
+                        {{item.comment}}
+                      </article>
+                      <section class="comment-o-b">
+                        <div class="label-c">
+                          <span>{{index+1}}楼</span>
+                          <span class="time">{{new Date(item.createdAt).toLocaleString()}}</span>
+                          <span
+                            class="reply-txt"
+                            v-if="item.children_comment.length>0"
+                          >{{item.children_comment.length}}回复</span>
+                        </div>
+                        <div class="operate-i">
+                          <span class=""><i class="fa fa-thumbs-up"></i></span>
+                          <span><i
+                              class="fa fa-comment"
+                              @click="replyComment(item)"
+                            ></i></span>
+                        </div>
+                      </section>
+
+                      <section
+                        class="comment-children-b"
+                        v-if="item.children_comment.length>0"
+                      >
+                        <div
+                          class="c-c-b-1"
+                          v-for="(item, index) in item.children_comment"
+                          :key="index"
+                        >
+                          <aside class="aside">
+                            <img
+                              :src="item.user_from.avatar"
+                              alt=""
+                              srcset=""
+                            >
+                          </aside>
+                          <main class="comment-b1">
+                            <section>{{item.user_from.userName}}</section>
+                            <section class="comment">{{item.comment}}</section>
+                          </main>
+                        </div>
+                      </section>
+
+                    </section>
+
+                  </main>
+
                 </li>
               </ul>
             </cube-scroll>
@@ -100,42 +164,20 @@ export default {
         html: "",
         imgs: []
       },
-      dialog:null,
-      comments: [
-        {
-          comment: "哈哈哈哈哈"
-        },
-        {
-          comment: "哈哈哈哈哈"
-        },
-        {
-          comment: "哈哈哈哈哈"
-        },
-        {
-          comment: "哈哈哈哈哈"
-        },
-        {
-          comment: "哈哈哈哈哈"
-        },
-        {
-          comment: "哈哈哈哈哈"
-        },
-        {
-          comment: "哈哈哈哈哈"
-        },
-        {
-          comment: "哈哈哈哈哈"
-        },
-        {
-          comment: "哈哈哈哈哈"
-        },
-        {
-          comment: "哈哈哈哈哈"
-        },
-        {
-          comment: "哈哈哈哈哈"
-        }
-      ],
+      dialog: null,
+      commentForm: {
+        textValue: "",
+        articleId: "",
+        userId: ""
+      },
+      replyForm: {
+        comment: "",
+        replytouserid: "",
+        articleId: "",
+        userId: "",
+        parentcommentid: ""
+      },
+      comments: [],
       options: {
         pullDownRefresh: {
           threshold: 60,
@@ -149,26 +191,82 @@ export default {
   },
   methods: {
     onPullingUp() {
-      console.log(222);
+      this.loadComments();
     },
     reply() {
       this.dialog = this.$createDialog({
         type: "prompt",
-        title: "添加评论",
+        title: `${"评论文章"}`,
         prompt: {
           value: "",
           placeholder: "请输入"
         },
-        onConfirm: (e, promptValue) => {
+        onConfirm: async (e, promptValue) => {
+          this.commentForm.textValue = promptValue;
+          this.commentForm.userId = JSON.parse(
+            sessionStorage.getItem("user")
+          ).id;
+          this.commentForm.articleId = this.$route.query.id;
 
-          
+          await this.$store.dispatch("comment/comments", {
+            ...this.commentForm
+          });
 
-          // this.$createToast({
-          //   type: "warn",
-          //   time: 1000,
-          //   txt: `Prompt value: ${promptValue || ""}`
-          // }).show();
+          if (this.$store.state.comment.commentsRes.success) {
+            this.dialog.hide();
+            this.commentForm.textValue = "";
 
+            this.loadComments();
+
+            this.$createToast({
+              type: "success",
+              time: 1000,
+              txt: `Prompt value: ${"评论成功" || ""}`
+            }).show();
+          }
+        }
+      }).show();
+    },
+    async loadComments() {
+      await this.$store.dispatch("comment/commentlist", {
+        articleId: this.$route.query.id
+      });
+
+      if (this.$store.state.comment.commentListRes.success) {
+        this.comments = this.$store.state.comment.commentListRes.commentList;
+      }
+    },
+    replyComment(item) {
+      this.dialog = this.$createDialog({
+        type: "prompt",
+        title: `@${item.user.userName}`,
+        content: `${item.comment}`,
+        prompt: {
+          value: "",
+          placeholder: "请输入"
+        },
+        onConfirm: async (e, promptValue) => {
+          this.replyForm.comment = promptValue;
+          this.replyForm.replytouserid = item.user.userId;
+          this.replyForm.parentcommentid = item._id;
+          this.replyForm.articleId = this.$route.query.id;
+
+          await this.$store.dispatch("comment/reply", {
+            ...this.replyForm
+          });
+
+          if (this.$store.state.comment.commentsRes.success) {
+            this.dialog.hide();
+            this.commentForm.textValue = "";
+
+            this.loadComments();
+
+            this.$createToast({
+              type: "success",
+              time: 1000,
+              txt: `${"评论成功" || ""}`
+            }).show();
+          }
         }
       }).show();
     }
@@ -177,13 +275,9 @@ export default {
     // 请检查您是否在服务器端
     // 使用 req 和 res
 
-    // console.log(context.route.query);
-
     const { data } = await context.store.$axios.$get("/api/getSingleArticle", {
       params: { id: context.route.query.id }
     });
-
-    console.log(data.author);
 
     if (process.server) {
       // return { host: req.headers.host };
@@ -228,6 +322,10 @@ export default {
         }
       }
 
+      article {
+        word-break: break-all;
+      }
+
       .comment-scroll-wrapper {
         flex: 1;
         position: relative;
@@ -250,6 +348,100 @@ export default {
               padding: 0;
             }
           }
+
+          .comment-wrapper {
+            // padding: 10px;
+            .comment-item {
+              border-bottom: 1px solid rgb(255, 255, 255);
+              min-height: 80px;
+              .comment-b {
+                display: flex;
+                margin-top: 10px;
+                aside {
+                  margin: 0 10px;
+                  img {
+                    width: 40px;
+                    border-radius: 50%;
+                  }
+                }
+                .comment-u-b {
+                  width: 100%;
+                  margin-right: 10px;
+                  .comment-u {
+                    margin-bottom: 10px;
+                    display: flex;
+                    align-items: center;
+                    .author-txt {
+                      border: 1px solid #ff5d2c;
+                      border-radius: 4px;
+                      padding: 2px 4px;
+                      font-size: 12px;
+                      margin-left: 10px;
+                      color: brown;
+                    }
+                    strong {
+                      font-size: 1.2rem;
+                    }
+                  }
+                  .comment-o-b {
+                    margin-top: 10px;
+                    margin-bottom: 10px;
+                    color: #9e9b9b;
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    .label-c {
+                      display: flex;
+                      justify-content: center;
+                      align-items: center;
+                      .time {
+                        font-size: 12px;
+                      }
+                      span:nth-child(2) {
+                        margin-left: 10px;
+                      }
+                      .reply-txt {
+                        padding: 2px 10px;
+                        border: 1px solid #504e4e;
+                        background: #504e4e;
+                        border-radius: 72px;
+                        color: #fff;
+                        font-size: 12px;
+                        margin-left: 10px;
+                      }
+                    }
+                    .operate-i {
+                      width: 20%;
+                      display: flex;
+                      justify-content: space-between;
+                    }
+                  }
+
+                  .comment-children-b {
+                    .c-c-b-1 {
+                      display: flex;
+                      align-items: center;
+                      padding-bottom: 20px;
+                      .aside{
+                        img{
+                          width: 30px;
+                          height: 30px;
+                          border-radius: 50%;
+                        }
+                        display: flex;
+                        align-items: flex-end;
+                      }
+                      .comment-b1{
+                        .comment{
+                          margin-top: 10px;
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
         }
       }
     }
@@ -266,5 +458,11 @@ export default {
   }
 }
 </style>
+<style >
+.cube-dialog-content-def > p {
+  word-break: break-all;
+}
+</style>
+
 
 

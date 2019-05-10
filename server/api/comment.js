@@ -2,7 +2,7 @@
  * @Description: 评论api
  * @Author: chenchen
  * @Date: 2019-04-24 22:15:40
- * @LastEditTime: 2019-04-29 08:53:26
+ * @LastEditTime: 2019-05-10 00:11:42
  */
 const { Router } = require('express');
 const mongoose = require('mongoose');
@@ -24,8 +24,9 @@ router.post('/comment', async (req, res, next) => {
 
 
     let { textValue, articleId, userId } = req.body;
-    let data, user;
-
+   
+    
+    let data, user, author;
     try {
         const comment = new Comment;
         comment.articleId = articleId;
@@ -33,17 +34,25 @@ router.post('/comment', async (req, res, next) => {
         comment.user.userId = userId;
 
         if (userId) {
-            user = await User.findById({ _id: userId })
+            user = await User.findById({ _id: userId });
+            author = await Article.findById({ _id: articleId }, "user");
+
+            console.log(author.user.id, userId);
+
         }
 
         if (user) {
             comment.user.userName = user.userName;
             comment.user.avatar = user.avatarUrl;
+            comment.user.isAuthor = author.user.id === userId;
         }
 
         data = await comment.save();
 
     } catch (error) {
+
+        console.log(error);
+
         res.json({
             success: false,
             data: null,
@@ -98,14 +107,19 @@ router.get('/commentlist', async (req, res, next) => {
 })
 
 router.put('/reply', async (req, res, next) => {
-    let { parentcommentid, user, replytouserid, comment } = req.body;
+    let { parentcommentid, userId, replytouserid, comment,articleId } = req.body;
 
+    let cdoc, replydata, commentid, isFloorOwner = false, isAuthor = false, commentTxt,subCommentdoc;
 
-    let doc, replydata,commentid,isFloorOwner=false,isAuthor=false;
     try {
-        doc = await Comment.findById({ _id: parentcommentid });
 
-        if (!doc) {
+        cdoc = await Comment.findById({ _id: parentcommentid });
+        article_doc = await Article.findById({ _id: articleId });
+
+        udoc = await User.findById({ _id: userId });
+        rudoc = await User.findById({ _id: replytouserid });
+
+        if (!cdoc || !udoc) {
             return res.json({
                 success: false,
                 data: null,
@@ -114,39 +128,45 @@ router.put('/reply', async (req, res, next) => {
             })
         }
 
-        if (doc.user.userId===user.userId) {
+        commentTxt = `<a href="javascript:;" @click="goUser(${rudoc._id})">@${rudoc.userName}</a>:${comment}`
+
+        console.log(article_doc.user.id,cdoc.user.userId ,userId);
+        
+
+        if (article_doc.user.id === userId) {
+            isAuthor = true
+        } 
+        
+        if (cdoc.user.userId === userId) {
             isFloorOwner = true
         }
 
 
-        const { authorId } =  await Article.findOne({articleId:doc.articleId});
+        // const commentModel = new Comment;
 
-        if (user.articleId===authorId) {
-            
-        }
+      
 
-        commentid = mongoose.Types.ObjectId();
-
-        replydata = {
-            parentcommentid: parentcommentid,
-            commentid: commentid,
-            user: {
-                userId:user.userId,
-                userName:user.userName,
-                avatar:user.avatar,
+        cdoc.children_comment.push({
+            user_from:{
+                userId:udoc._id,
+                userName:udoc.userName,
+                avatar:udoc.avatarUrl,
+                isAuthor:isAuthor,
+                isFloorOwner:isFloorOwner,
             },
-            replytouserid: replytouserid,
-            comment: comment
-        }
-
-        const res = await Comment.updateOne({ _id: doc._id }, {
-            $set: {
-                replydata: doc.replydata.push(replydata)
-            }
+            user_to:replytouserid,
+            commentTxt:commentTxt,
+            comment:comment
         })
+        
+         subCommentdoc = cdoc.children_comment[0];
 
-        const ress = await doc.save();
+        // console.log(subCommentdoc,subCommentdoc.isNew) 
+       
 
+         ress = await cdoc.save();
+
+       
         
 
     } catch (error) {
@@ -165,9 +185,11 @@ router.put('/reply', async (req, res, next) => {
         success: true,
         data: {
             comment: {
-                content: "哈哈哈",
-                createTime: Date.now,
-                id: commentid,
+                commentTxt: commentTxt,
+                comment: subCommentdoc.comment,
+                createTime: subCommentdoc.createAt,
+                parentCommentId:parentcommentid,
+                id: subCommentdoc._id,
                 isFloorOwner: isFloorOwner,
                 isAuthor: isAuthor,
             }

@@ -2,7 +2,7 @@
  * @Description: 文章的状态管理
  * @Author: chenchen
  * @Date: 2019-03-28 19:55:16
- * @LastEditTime: 2019-04-28 00:58:55
+ * @LastEditTime: 2019-05-09 11:43:44
  */
 
 
@@ -18,15 +18,17 @@ export const state = () => ({
 
 export const mutations = {
   comments(state, payload) {
+    console.log(payload);
 
+    state.commentsRes.success = payload.success
   },
-  commentlist(state,pl){
+  commentlist(state, pl) {
     state.commentListRes.commentList = [...pl.data];
     state.commentListRes.success = true;
   },
-  reply(state,pl){
+  reply(state, pl) {
     console.log(pl);
-    
+
   }
 }
 
@@ -35,9 +37,6 @@ export const actions = {
     commit
   }, params) {
     let data;
-
-    params.userId = this.state.user.userInfo.id;
-
     try {
       data = await this.$axios.$post('/api/comment', params);
       commit('comments', data)
@@ -48,18 +47,23 @@ export const actions = {
   async commentlist({ commit }, params) {
     let data;
     try {
-      data = await this.$axios.$get('/api/commentlist', {params});
+      data = await this.$axios.$get('/api/commentlist', { params });
       commit('commentlist', data)
     } catch (error) {
 
     }
   },
-  async reply({ commit }, params) {
+  async reply(state, params) {
     let data;
-    params.user = this.state.user.userInfo
+
+    let user = JSON.parse(sessionStorage.getItem("user"));
+    console.log(user);
+
+    params.userId = user.id;
+
     try {
       data = await this.$axios.$put('/api/reply', params);
-      commit('reply', data)
+      state.commit('reply', data)
     } catch (error) {
 
     }

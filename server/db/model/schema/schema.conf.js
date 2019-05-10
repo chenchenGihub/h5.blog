@@ -2,7 +2,7 @@
  * @Description: 原型类型定义
  * @Author: chenchen
  * @Date: 2019-04-12 20:07:01
- * @LastEditTime: 2019-05-08 11:15:53
+ * @LastEditTime: 2019-05-09 23:47:41
  */
 const {
   Schema
@@ -26,8 +26,8 @@ exports.ARTICEL_SCHEMA = {
     maxlength: [8000, "文本内容不能超过8000"],
     alias: 'c'
   },
-  imgType:{
-    type:Array
+  imgType: {
+    type: Array
   },
   htmlType: {
     type: String,
@@ -113,53 +113,10 @@ exports.COMMENT_SCHEMA = {
       }
     }
   ],
-  replydataType: [
-    //   {
-    //   parentcommentid:{
-    //     type:Schema.Types.ObjectId
-    //   },
-    //   commentid:{
-    //     type:Schema.Types.ObjectId
-    //   },
-    //   user: {
-    //     userId: {
-    //       type: String,
-    //       trim: true,
-    //       require: true,
-    //     },
-    //     userName: {
-    //       type: String,
-    //       trim: true,
-    //       require: true,
-    //     },
-    //     avatar: {
-    //       type: String,
-    //       require: true
-    //     }
-    //   },
-    //   replytouserid:{
-    //     type:Schema.Types.ObjectId
-    //   },
-    //   createdTime: {
-    //     type: Date,
-    //     default: Date.now()
-    //   },
-    //   comment: {
-    //     type: String,
-    //     trim: true,
-    //     require: true,
-    //     set: v => v.trim(),
-    //     get: v => v.trim(),
-    //     alias: 'c'
-    //   },
-    // }
-  ],
   commentType: {
     type: String,
     trim: true,
     require: true,
-    set: v => v.trim(),
-    get: v => v.trim(),
     alias: 'c'
   },
   userType: {
@@ -176,15 +133,54 @@ exports.COMMENT_SCHEMA = {
     avatar: {
       type: String,
       require: true
+    },
+    isAuthor: {
+      type: Boolean,
+      default: false
     }
   },
   deviceType: [String],
   ipType: [String],
   articleType: Schema.Types.ObjectId,
-  createdTime: {
-    type: Date,
-    default: Date.now()
-  },
+  /**
+   * 子文档
+   */
+  children_comment_type: new Schema({
+    user_from: {
+      userId: {
+        type: Schema.Types.ObjectId,
+        require: true
+      },
+      userName: {
+        type: String,
+        trim: true,
+        require: true,
+      },
+      avatar: {
+        type: String,
+        require: true
+      },
+      isAuthor: {
+        type: Boolean,
+        default: false
+      },
+      isFloorOwner: {
+        type: Boolean,
+        default: false
+      }
+    },
+    user_to: {
+      type: Schema.Types.ObjectId,
+      require: true
+    },
+    commentTxt: String,
+    comment: String,
+  }, {
+      timestamps: {
+        createdAt: 'createdAt',
+        updatedAt: 'updatedAt'
+      }
+    })
 }
 
 
