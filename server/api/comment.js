@@ -24,8 +24,8 @@ router.post('/comment', async (req, res, next) => {
 
 
     let { textValue, articleId, userId } = req.body;
-   
-    
+
+
     let data, user, author;
     try {
         const comment = new Comment;
@@ -107,14 +107,14 @@ router.get('/commentlist', async (req, res, next) => {
 })
 
 router.put('/reply', async (req, res, next) => {
-    let { parentcommentid, userId, replytouserid, comment,articleId } = req.body;
+    let { parentcommentid, userId, replytouserid, comment,type } = req.body;
 
-    let cdoc, replydata, commentid, isFloorOwner = false, isAuthor = false, commentTxt,subCommentdoc;
+    let cdoc, isFloorOwner = false, isAuthor = false, commentTxt, subCommentdoc;
 
     try {
 
         cdoc = await Comment.findById({ _id: parentcommentid });
-        article_doc = await Article.findById({ _id: articleId });
+        article_doc = await Article.findById({ _id: cdoc.articleId });
 
         udoc = await User.findById({ _id: userId });
         rudoc = await User.findById({ _id: replytouserid });
@@ -128,46 +128,46 @@ router.put('/reply', async (req, res, next) => {
             })
         }
 
-        commentTxt = `<a href="javascript:;" @click="goUser(${rudoc._id})">@${rudoc.userName}</a>:${comment}`
+        commentTxt = type ? `<a href="javascript:;" @click="goUser(${rudoc._id})">@${rudoc.userName}</a>:${comment}` : comment
 
-        console.log(article_doc.user.id,cdoc.user.userId ,userId);
-        
+        console.log(article_doc.user.id, cdoc.user.userId, userId);
+
 
         if (article_doc.user.id === userId) {
             isAuthor = true
-        } 
-        
+        }
+
         if (cdoc.user.userId === userId) {
             isFloorOwner = true
         }
 
 
-        // const commentModel = new Comment;
-
-      
-
-        cdoc.children_comment.push({
-            user_from:{
-                userId:udoc._id,
-                userName:udoc.userName,
-                avatar:udoc.avatarUrl,
-                isAuthor:isAuthor,
-                isFloorOwner:isFloorOwner,
+        let childComment = {
+            user_from: {
+                userId: udoc._id,
+                userName: udoc.userName,
+                avatar: udoc.avatarUrl,
+                isAuthor: isAuthor,
+                isFloorOwner: isFloorOwner,
             },
-            user_to:replytouserid,
-            commentTxt:commentTxt,
-            comment:comment
-        })
-        
-         subCommentdoc = cdoc.children_comment[0];
+            parentcommentid: parentcommentid,
+            user_to: replytouserid,
+            commentTxt: commentTxt,
+            comment: comment
+        }
+
+
+        cdoc.children_comment.push(childComment)
+
+        subCommentdoc = cdoc.children_comment[0];
 
         // console.log(subCommentdoc,subCommentdoc.isNew) 
-       
 
-         ress = await cdoc.save();
 
-       
-        
+        ress = await cdoc.save();
+
+
+
 
     } catch (error) {
         console.log(error);
@@ -188,7 +188,7 @@ router.put('/reply', async (req, res, next) => {
                 commentTxt: commentTxt,
                 comment: subCommentdoc.comment,
                 createTime: subCommentdoc.createAt,
-                parentCommentId:parentcommentid,
+                parentCommentId: parentcommentid,
                 id: subCommentdoc._id,
                 isFloorOwner: isFloorOwner,
                 isAuthor: isAuthor,

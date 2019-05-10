@@ -173,6 +173,7 @@ exports.COMMENT_SCHEMA = {
       type: Schema.Types.ObjectId,
       require: true
     },
+    parentcommentid: { type: Schema.Types.ObjectId, require: true },
     commentTxt: String,
     comment: String,
   }, {

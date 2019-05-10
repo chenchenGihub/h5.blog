@@ -5,43 +5,28 @@
  * @LastEditTime: 2019-05-10 00:32:37
  -->
 <template>
-  <CubePage
-    type="scroll-view"
-    class="mainpage"
-  >
-
+  <CubePage type="scroll-view" class="mainpage">
     <template slot="header">
       <Header>
         <template>
-          <div>
-            文章详情
-          </div>
+          <div>文章详情</div>
         </template>
       </Header>
     </template>
 
     <template slot="content">
-
       <main class="ql-snow">
         <div class="comment-scroll-wrapper">
-          <div
-            class="comment-scroll-list-wrap"
-            ref="scrollWrapper"
-          >
+          <div class="comment-scroll-list-wrap" ref="scrollWrapper">
             <cube-scroll
               ref="commentScroll"
               :data="comments"
               :options="options"
               @pulling-up="onPullingUp"
             >
-
               <header class="header-b">
                 <aside class="img-b">
-                  <img
-                    :src="user.avatar"
-                    alt=""
-                    srcset=""
-                  >
+                  <img :src="user.avatar" alt srcset>
                 </aside>
                 <main>
                   <section>{{user.name}}</section>
@@ -49,37 +34,21 @@
                 </main>
               </header>
 
-              <article
-                class="ql-editor article"
-                v-html="content.html"
-              ></article>
+              <article class="ql-editor article" v-html="content.html"></article>
               <div class="seperater"></div>
               <ul class="comment-wrapper">
-                <li
-                  v-for="(item, index) in comments"
-                  :key="index"
-                  class="comment-item"
-                >
+                <li v-for="(item, index) in comments" :key="index" class="comment-item">
                   <main class="comment-b">
                     <aside>
-                      <img
-                        :src="item.user.avatar"
-                        alt=""
-                        srcset=""
-                      >
+                      <img :src="item.user.avatar" alt srcset>
                     </aside>
                     <section class="comment-u-b">
                       <div class="comment-u">
                         <strong>{{item.user.userName}}</strong>
-                        <div
-                          class="author-txt"
-                          v-if="item.user.isAuthor"
-                        >作者</div>
+                        <div class="author-txt" v-if="item.user.isAuthor">作者</div>
                         <!-- <i>{{item.user.userName}}</i> -->
                       </div>
-                      <article>
-                        {{item.comment}}
-                      </article>
+                      <article>{{item.comment}}</article>
                       <section class="comment-o-b">
                         <div class="label-c">
                           <span>{{index+1}}楼</span>
@@ -90,41 +59,42 @@
                           >{{item.children_comment.length}}回复</span>
                         </div>
                         <div class="operate-i">
-                          <span class=""><i class="fa fa-thumbs-up"></i></span>
-                          <span><i
-                              class="fa fa-comment"
-                              @click="replyComment(item)"
-                            ></i></span>
+                          <span class>
+                            <i class="fa fa-thumbs-up"></i>
+                          </span>
+                          <span>
+                            <i class="fa fa-comment" @click="replyComment(0,item)"></i>
+                          </span>
                         </div>
                       </section>
 
-                      <section
-                        class="comment-children-b"
-                        v-if="item.children_comment.length>0"
-                      >
+                      <section class="comment-children-b" v-if="item.children_comment.length>0">
                         <div
                           class="c-c-b-1"
                           v-for="(item, index) in item.children_comment"
                           :key="index"
                         >
                           <aside class="aside">
-                            <img
-                              :src="item.user_from.avatar"
-                              alt=""
-                              srcset=""
-                            >
+                            <img :src="item.user_from.avatar" alt srcset>
                           </aside>
                           <main class="comment-b1">
-                            <section>{{item.user_from.userName}}</section>
-                            <section class="comment">{{item.comment}}</section>
+                            <section class="username">
+                              {{item.user_from.userName}}
+                              <div class="author-txt" v-if="item.user_from.isAuthor">作者</div>
+                              <div class="floorOwner-txt" v-else-if="item.user_from.isFloorOwner">楼主</div>
+                               <span class="thumb-up">
+                                <i class="fa fa-thumbs-up"></i>
+                              </span>
+                            </section>
+                            <section @click="replyComment(1,item)"  class="comment">
+                              <span class="commentTxt" v-html="item.commentTxt"></span>
+                             
+                            </section>
                           </main>
                         </div>
                       </section>
-
                     </section>
-
                   </main>
-
                 </li>
               </ul>
             </cube-scroll>
@@ -135,12 +105,20 @@
 
     <template slot="footer">
       <div class="operate">
-        <span><i class="fa fa-thumbs-up"></i> <span>赞</span></span>
-        <span @click="reply"><i class="fa fa-comment"></i><span>回复</span> </span>
-        <span><i class="fa fa-edit"></i> <span>转发</span> </span>
+        <span>
+          <i class="fa fa-thumbs-up"></i>
+          <span>赞</span>
+        </span>
+        <span @click="reply">
+          <i class="fa fa-comment"></i>
+          <span>回复</span>
+        </span>
+        <span>
+          <i class="fa fa-edit"></i>
+          <span>转发</span>
+        </span>
       </div>
     </template>
-
   </CubePage>
 </template>
 <script>
@@ -171,6 +149,7 @@ export default {
         userId: ""
       },
       replyForm: {
+        type: 0,
         comment: "",
         replytouserid: "",
         articleId: "",
@@ -236,20 +215,27 @@ export default {
         this.comments = this.$store.state.comment.commentListRes.commentList;
       }
     },
-    replyComment(item) {
+    /**
+     * type===1：回复评论区的用户,
+     * type===0:回复楼主
+     */
+    replyComment(type, item) {
       this.dialog = this.$createDialog({
         type: "prompt",
-        title: `@${item.user.userName}`,
+        title: `@${type ? item.user_from.userName : item.user.userName}`,
         content: `${item.comment}`,
         prompt: {
           value: "",
           placeholder: "请输入"
         },
         onConfirm: async (e, promptValue) => {
+          this.replyForm.type = type;
           this.replyForm.comment = promptValue;
-          this.replyForm.replytouserid = item.user.userId;
-          this.replyForm.parentcommentid = item._id;
-          this.replyForm.articleId = this.$route.query.id;
+          this.replyForm.userId = JSON.parse(sessionStorage.getItem("user")).id;
+          this.replyForm.replytouserid = type ? item.user_to : item.user.userId;
+          this.replyForm.parentcommentid = type
+            ? item.parentcommentid
+            : item._id;
 
           await this.$store.dispatch("comment/reply", {
             ...this.replyForm
@@ -269,6 +255,10 @@ export default {
           }
         }
       }).show();
+    },
+    goUser(id){
+      console.log(id);
+      
     }
   },
   async asyncData(context) {
@@ -422,18 +412,52 @@ export default {
                       display: flex;
                       align-items: center;
                       padding-bottom: 20px;
-                      .aside{
-                        img{
+                      .aside {
+                        img {
                           width: 30px;
                           height: 30px;
                           border-radius: 50%;
                         }
                         display: flex;
                         align-items: flex-end;
+                        align-self: end
                       }
-                      .comment-b1{
-                        .comment{
+                      .comment-b1 {
+                        width: 100%;
+                        .username {
+                          display: flex;
+                          align-items: center;
+                          .author-txt,
+                          .floorOwner-txt {
+                            border: 1px solid #ff5d2c;
+                            border-radius: 4px;
+                            padding: 2px 4px;
+                            font-size: 12px;
+                            margin-left: 10px;
+                            color: brown;
+                          }
+                          .floorOwner-txt{
+                            border-color: #f86f45;
+                            color: rgb(161, 86, 86)
+                          }
+                          .thumb-up{
+                            position: absolute;
+                            right: 10px;
+                            color: #9e9b9b
+                          }
+                        }
+                        .comment {
                           margin-top: 10px;
+                          width: 100%;
+                          display: flex;
+                          justify-content: space-between;
+                          .commentTxt{
+                            word-break: break-all;
+                            width: 90%
+                          }
+                          span {
+                            color: #9e9b9b;
+                          }
                         }
                       }
                     }
