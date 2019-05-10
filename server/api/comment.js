@@ -107,7 +107,7 @@ router.get('/commentlist', async (req, res, next) => {
 })
 
 router.put('/reply', async (req, res, next) => {
-    let { parentcommentid, userId, replytouserid, comment,type } = req.body;
+    let { parentcommentid, userId, replytouserid, comment,reply_to_comment,type } = req.body;
 
     let cdoc, isFloorOwner = false, isAuthor = false, commentTxt, subCommentdoc;
 
@@ -128,7 +128,7 @@ router.put('/reply', async (req, res, next) => {
             })
         }
 
-        commentTxt = type ? `<a href="javascript:;" @click="goUser(${rudoc._id})">@${rudoc.userName}</a>:${comment}` : comment
+        commentTxt = type ? `${reply_to_comment} <strong style="color:#000">//</strong> <a href="javascript:;" @click="goUser(${rudoc._id})">@${rudoc.userName}</a>:${comment}` : comment
 
         console.log(article_doc.user.id, cdoc.user.userId, userId);
 

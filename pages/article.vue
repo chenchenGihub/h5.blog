@@ -88,7 +88,6 @@
                             </section>
                             <section @click="replyComment(1,item)"  class="comment">
                               <span class="commentTxt" v-html="item.commentTxt"></span>
-                             
                             </section>
                           </main>
                         </div>
@@ -220,6 +219,8 @@ export default {
      * type===0:回复楼主
      */
     replyComment(type, item) {
+      console.log(item);
+      
       this.dialog = this.$createDialog({
         type: "prompt",
         title: `@${type ? item.user_from.userName : item.user.userName}`,
@@ -230,6 +231,7 @@ export default {
         },
         onConfirm: async (e, promptValue) => {
           this.replyForm.type = type;
+          this.replyForm.reply_to_comment = item.comment;
           this.replyForm.comment = promptValue;
           this.replyForm.userId = JSON.parse(sessionStorage.getItem("user")).id;
           this.replyForm.replytouserid = type ? item.user_to : item.user.userId;
