@@ -2,7 +2,7 @@
  * @Description: 博客文章api
  * @Author: chenchen
  * @Date: 2019-04-12 20:07:01
- * @LastEditTime: 2019-05-08 15:28:59
+ * @LastEditTime: 2019-05-12 10:44:51
  */
 
 const { Router } = require('express');
@@ -10,6 +10,7 @@ const router = Router()
 const { auths } = require('../middleware/auth')
 const Article = require('../db/model/article');
 const User = require('../db/model/user');
+const Comment = require('../db/model/comment');
 
 const log4js = require('log4js');
 // const log4js = require('../log/log');
@@ -66,7 +67,6 @@ router.get('/article', async (req, res, next) => {
 router.post("/publishArticle", async (req, res, next) => {
     let user, article;
 
-    console.log(req.body);
 
     try {
         user = await User.findById(req.body.id);
@@ -141,11 +141,32 @@ router.post("/publishArticle", async (req, res, next) => {
 })
 
 
-router.get('/getSingleArticle', async (req, res, next) => {
-    const { id } = req.query;
-    let article, user, authorId;
+router.get('/getSingleArticle',async (req, res, next) => {
+    const { id,userId } = req.query;
+
+   
+    
+    let article, user,isLike=false,comment_counts,comment_doc,children_comment_count=0;
     try {
-        article = await Article.findById(id, "title text html user");
+
+        article = await Article.findById(id, "title text html user votes");
+
+        let votesDoc = await article.votes.id(userId);
+      
+        comment_doc = await Comment.find({articleId:id});
+
+        for (let comment of comment_doc) {
+           
+           children_comment_count += comment.children_comment.length
+            
+        }
+
+        comment_counts = comment_doc.length+children_comment_count;
+
+    
+        if (votesDoc) {
+            isLike = true
+        }
 
         if (!article) {
             return res.json({
@@ -160,14 +181,9 @@ router.get('/getSingleArticle', async (req, res, next) => {
 
         if (article.user.id) {
 
-
             user = await User.findById({ _id: article.user.id }, "_id avatarUrl userName description");
 
-
-
         }
-
-
 
 
     } catch (error) {
@@ -189,10 +205,39 @@ router.get('/getSingleArticle', async (req, res, next) => {
             title: article.title,
             text: article.text,
             html: article.html,
-            author: user
+            author: user,
+            voteCounts:article.votes.length,
+            isLike,
+            comment_counts
         },
         code: null,
         msg: null
+    })
+})
+
+router.put('/togglelike', async (req, res, next) => {
+
+    let { articleId, userId } = req.body;
+
+    const articleDoc = await Article.findById({ _id: articleId });
+
+    let votesDoc = await articleDoc.votes.id(userId);
+
+   
+
+    if (votesDoc) {
+        articleDoc.votes.id(userId).remove()
+    } else {
+        articleDoc.votes.push(userId)
+        votesdoc = articleDoc.votes[0];
+    }
+
+    await articleDoc.save()
+
+
+    res.json({
+        success:true,
+        data: {isLike:!votesDoc}
     })
 })
 

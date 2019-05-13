@@ -2,9 +2,9 @@
  * @Description: 文章的状态管理
  * @Author: chenchen
  * @Date: 2019-03-28 19:55:16
- * @LastEditTime: 2019-05-09 11:43:44
+ * @LastEditTime: 2019-05-12 23:38:58
  */
-
+import Cookies from 'js-cookie'
 
 export const state = () => ({
   commentsRes: {
@@ -13,13 +13,19 @@ export const state = () => ({
   commentListRes: {
     commentList: [],
     success: false
+  },
+  togglelikeRes: {
+    success: false,
+    isLike: false
+  },
+  togglecchildlikeRes:{
+    success: false,
+    isLike: false
   }
 })
 
 export const mutations = {
   comments(state, payload) {
-    console.log(payload);
-
     state.commentsRes.success = payload.success
   },
   commentlist(state, pl) {
@@ -29,6 +35,23 @@ export const mutations = {
   reply(state, pl) {
     console.log(pl);
 
+  },
+  togglelike(state, pl) {
+    state.togglelikeRes.success = pl.success;
+    state.togglelikeRes.isLike = pl.data.isLike;
+  },
+  reloadTogglelike(state, pl) {
+    state.commentListRes.commentList.find(v => v._id === pl.commentId).isLike = pl.isLike
+
+    if (pl.isLike) {
+      state.commentListRes.commentList.find(v => v._id === pl.commentId).votedCounts++
+    } else {
+      state.commentListRes.commentList.find(v => v._id === pl.commentId).votedCounts--
+    }
+  },
+  togglecchildlike(state, pl) {
+    state.togglecchildlike.success = pl.success;
+    state.togglecchildlikeRes.isLike = pl.data.isLike;
   }
 }
 
@@ -64,6 +87,27 @@ export const actions = {
     try {
       data = await this.$axios.$put('/api/reply', params);
       state.commit('reply', data)
+    } catch (error) {
+
+    }
+  },
+  async togglelike(state, params) {
+    let data;
+    params.userId = Cookies.get("id");
+
+    try {
+      data = await this.$axios.$put('/api/toggleclike', params);
+      state.commit('togglelike', data)
+    } catch (error) {
+
+    }
+  },
+  async togglecchildlike(state, params) {
+    let data
+
+    try {
+      data = await this.$axios.$put('/api/togglecchildlike', params);
+      state.commit('togglecchildlike', data)
     } catch (error) {
 
     }

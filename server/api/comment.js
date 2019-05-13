@@ -2,7 +2,7 @@
  * @Description: 评论api
  * @Author: chenchen
  * @Date: 2019-04-24 22:15:40
- * @LastEditTime: 2019-05-10 00:11:42
+ * @LastEditTime: 2019-05-13 08:49:49
  */
 const { Router } = require('express');
 const mongoose = require('mongoose');
@@ -36,9 +36,6 @@ router.post('/comment', async (req, res, next) => {
         if (userId) {
             user = await User.findById({ _id: userId });
             author = await Article.findById({ _id: articleId }, "user");
-
-            console.log(author.user.id, userId);
-
         }
 
         if (user) {
@@ -72,16 +69,43 @@ router.post('/comment', async (req, res, next) => {
 
 
 router.get('/commentlist', async (req, res, next) => {
-    let { articleId } = req.query;
 
-    let doc;
+    let { articleId, userId } = req.query;
+    let docs, user, isLike = false, votedCounts;
+
     try {
-        doc = await Comment.find({ articleId: articleId });
 
-        if (!doc) {
+        docs = await Comment.find({ articleId: articleId });
+
+        for (let doc of docs) {
+            
+            user = doc.voted.id(userId);
+
+            if (user) {
+                doc.isLike = true
+            }
+
+            doc.votedCounts = doc.voted.length;
+
+            for (let cdoc of doc.children_comment) {
+                
+                user = cdoc.voted.id(userId);
+
+                if (user) {
+                    cdoc.isLike = true
+                }
+
+                cdoc.votedCounts = cdoc.voted.length;
+            }
+
+        }
+
+
+
+        if (!docs) {
             return res.json({
                 success: false,
-                data: doc,
+                data: null,
                 code: errorCode.NOT_EXSIT,
                 msg: errorMsg.NOT_EXSIT
             })
@@ -99,7 +123,7 @@ router.get('/commentlist', async (req, res, next) => {
 
     res.json({
         success: true,
-        data: doc,
+        data: docs,
         code: null,
         msg: null
     })
@@ -107,7 +131,7 @@ router.get('/commentlist', async (req, res, next) => {
 })
 
 router.put('/reply', async (req, res, next) => {
-    let { parentcommentid, userId, replytouserid, comment,reply_to_comment,type } = req.body;
+    let { parentcommentid, userId, replytouserid, comment, reply_to_comment, type } = req.body;
 
     let cdoc, isFloorOwner = false, isAuthor = false, commentTxt, subCommentdoc;
 
@@ -128,10 +152,7 @@ router.put('/reply', async (req, res, next) => {
             })
         }
 
-        commentTxt = type ? `${reply_to_comment} <strong style="color:#000">//</strong> <a href="javascript:;" @click="goUser(${rudoc._id})">@${rudoc.userName}</a>:${comment}` : comment
-
-        console.log(article_doc.user.id, cdoc.user.userId, userId);
-
+        commentTxt = type ? `${comment} <strong style="color:#000">//</strong><a href="javascript:;" @click="goUser(${rudoc._id})">@${rudoc.userName}</a>:${reply_to_comment}` : comment
 
         if (article_doc.user.id === userId) {
             isAuthor = true
@@ -161,7 +182,6 @@ router.put('/reply', async (req, res, next) => {
 
         subCommentdoc = cdoc.children_comment[0];
 
-        // console.log(subCommentdoc,subCommentdoc.isNew) 
 
 
         ress = await cdoc.save();
@@ -197,6 +217,83 @@ router.put('/reply', async (req, res, next) => {
         code: null,
         msg: null
     })
+
+})
+
+router.put('/toggleclike', async (req, res, next) => {
+
+
+    let { commentId, userId } = req.body;
+    let cdoc, udoc, isLike = false, votes;
+
+    cdoc = await Comment.findById({ _id: commentId });
+
+    if (cdoc.voted.id(userId)) {
+        cdoc.voted.pull(userId)
+    } else {
+        cdoc.voted.push(userId)
+        subCommentdoc = cdoc.voted[0];
+        isLike = true
+    }
+
+    ress = await cdoc.save();
+
+    res.json({
+        success: true,
+        errorCode: null,
+        errorMsg: null,
+        data: {
+            isLike
+        }
+    })
+})
+
+router.put('/togglecchildlike', async (req, res, next) => {
+
+
+
+    let { commentId,
+        child_c_id,
+        userId } = req.body;
+
+    let cdoc;
+
+    cdoc = await Comment.findById({ _id: commentId });
+
+
+    if (cdoc.children_comment.id(child_c_id).voted.id(userId)) {
+        cdoc.children_comment.id(child_c_id).voted.pull(userId)
+    } else {
+        cdoc.children_comment.id(child_c_id).voted.push(userId)
+        cdoc.children_comment.id(child_c_id).voted[0];
+        isLike = true
+    }
+
+    try {
+        ress = await cdoc.save();
+        res.json({
+            success: true,
+            errorCode: null,
+            errorMsg: null,
+            data: {
+                isLike
+            }
+        });
+
+    } catch (error) {
+
+        res.json({
+            success: false,
+            errorCode: errorCode.DATABASE_ERROR,
+            errorMsg: errorMsg.DATABASE_ERROR,
+            data: null
+        });
+
+    }
+
+
+
+
 
 })
 

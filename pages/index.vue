@@ -2,7 +2,7 @@
  * @Description: 主页
  * @Author: chenchen
  * @Date: 2019-05-02 19:47:28
- * @LastEditTime: 2019-05-08 17:15:43
+ * @LastEditTime: 2019-05-11 11:23:40
  -->
 <template>
   <CubePage
@@ -149,6 +149,7 @@
 import CubePage from "~/components/CubePage.vue";
 import Header from "~/components/Header.vue";
 import TabBar from "~/components/TabBar.vue";
+import Cookie from 'js-cookie';
 export default {
   components: {
     Header,
@@ -199,10 +200,14 @@ export default {
     },
     goDetail(item) {
       
+     
+      
+      
       this.$router.push({
         path: "./article",
         query: {
-          id: item._id
+          id: item._id,
+          user_id:Cookie.get('id')
         }
       });
     }

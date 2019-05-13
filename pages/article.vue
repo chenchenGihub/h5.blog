@@ -2,10 +2,13 @@
  * @Description: file content
  * @Author: chenchen
  * @Date: 2019-05-07 09:56:31
- * @LastEditTime: 2019-05-10 00:32:37
+ * @LastEditTime: 2019-05-12 23:35:10
  -->
 <template>
-  <CubePage type="scroll-view" class="mainpage">
+  <CubePage
+    type="scroll-view"
+    class="mainpage"
+  >
     <template slot="header">
       <Header>
         <template>
@@ -17,7 +20,10 @@
     <template slot="content">
       <main class="ql-snow">
         <div class="comment-scroll-wrapper">
-          <div class="comment-scroll-list-wrap" ref="scrollWrapper">
+          <div
+            class="comment-scroll-list-wrap"
+            ref="scrollWrapper"
+          >
             <cube-scroll
               ref="commentScroll"
               :data="comments"
@@ -26,7 +32,11 @@
             >
               <header class="header-b">
                 <aside class="img-b">
-                  <img :src="user.avatar" alt srcset>
+                  <img
+                    :src="user.avatar"
+                    alt
+                    srcset
+                  >
                 </aside>
                 <main>
                   <section>{{user.name}}</section>
@@ -34,21 +44,48 @@
                 </main>
               </header>
 
-              <article class="ql-editor article" v-html="content.html"></article>
+              <article
+                class="ql-editor article"
+                v-html="content.html"
+              ></article>
               <div class="seperater"></div>
               <ul class="comment-wrapper">
-                <li v-for="(item, index) in comments" :key="index" class="comment-item">
+                <li
+                  v-for="(item, index) in comments"
+                  :key="index"
+                  class="comment-item"
+                >
                   <main class="comment-b">
                     <aside>
-                      <img :src="item.user.avatar" alt srcset>
+                      <img
+                        :src="item.user.avatar"
+                        alt
+                        srcset
+                      >
                     </aside>
                     <section class="comment-u-b">
                       <div class="comment-u">
                         <strong>{{item.user.userName}}</strong>
-                        <div class="author-txt" v-if="item.user.isAuthor">作者</div>
-                        <!-- <i>{{item.user.userName}}</i> -->
+                        <div
+                          class="author-txt"
+                          v-if="item.user.isAuthor"
+                        >作者</div>
+                        <div class="operate-i">
+                          <span
+                            class="thumb-up"
+                            :style="{color:item.isLike?'red':''}"
+                          >
+                            <span v-if="item.votedCounts">{{item.votedCounts}}</span>
+                            <i
+                              @click="togglelike(1,item)"
+                              class="fa fa-thumbs-up"
+                            ></i>
+
+                          </span>
+
+                        </div>
                       </div>
-                      <article>{{item.comment}}</article>
+                      <article @click="replyComment(0,item)">{{item.comment}}</article>
                       <section class="comment-o-b">
                         <div class="label-c">
                           <span>{{index+1}}楼</span>
@@ -58,36 +95,55 @@
                             v-if="item.children_comment.length>0"
                           >{{item.children_comment.length}}回复</span>
                         </div>
-                        <div class="operate-i">
-                          <span class>
-                            <i class="fa fa-thumbs-up"></i>
-                          </span>
-                          <span>
-                            <i class="fa fa-comment" @click="replyComment(0,item)"></i>
-                          </span>
-                        </div>
+
                       </section>
 
-                      <section class="comment-children-b" v-if="item.children_comment.length>0">
+                      <section
+                        class="comment-children-b"
+                        v-if="item.children_comment.length>0"
+                      >
                         <div
                           class="c-c-b-1"
                           v-for="(item, index) in item.children_comment"
                           :key="index"
                         >
                           <aside class="aside">
-                            <img :src="item.user_from.avatar" alt srcset>
+                            <img
+                              :src="item.user_from.avatar"
+                              alt
+                              srcset
+                            >
                           </aside>
                           <main class="comment-b1">
                             <section class="username">
                               {{item.user_from.userName}}
-                              <div class="author-txt" v-if="item.user_from.isAuthor">作者</div>
-                              <div class="floorOwner-txt" v-else-if="item.user_from.isFloorOwner">楼主</div>
-                               <span class="thumb-up">
-                                <i class="fa fa-thumbs-up"></i>
+                              <div
+                                class="author-txt"
+                                v-if="item.user_from.isAuthor"
+                              >作者</div>
+                              <div
+                                class="floorOwner-txt"
+                                v-else-if="item.user_from.isFloorOwner"
+                              >楼主</div>
+                              <span
+                                class="thumb-up"
+                                :style="{color:item.isLike?'red':''}"
+                              >
+                                <span v-if="item.votedCounts">{{item.votedCounts}}</span>
+                                <i
+                                  @click="togglelike(2,item)"
+                                  class="fa fa-thumbs-up"
+                                ></i>
                               </span>
                             </section>
-                            <section @click="replyComment(1,item)"  class="comment">
-                              <span class="commentTxt" v-html="item.commentTxt"></span>
+                            <section
+                              @click="replyComment(1,item)"
+                              class="comment"
+                            >
+                              <span
+                                class="commentTxt"
+                                v-html="item.commentTxt"
+                              ></span>
                             </section>
                           </main>
                         </div>
@@ -104,13 +160,20 @@
 
     <template slot="footer">
       <div class="operate">
-        <span>
+        <span
+          @click="togglelike(0)"
+          :style="{color:content.isLike?'red':''}"
+        >
           <i class="fa fa-thumbs-up"></i>
-          <span>赞</span>
+          <span v-if="content.voteCounts">{{content.voteCounts}}</span>
+          <span v-else>赞</span>
         </span>
+
         <span @click="reply">
           <i class="fa fa-comment"></i>
-          <span>回复</span>
+
+          <span v-if="content.comment_counts>0">{{content.comment_counts}}</span>
+          <span v-else>回复</span>
         </span>
         <span>
           <i class="fa fa-edit"></i>
@@ -123,6 +186,7 @@
 <script>
 import CubePage from "~/components/CubePage.vue";
 import Header from "~/components/Header.vue";
+import Cookie from "js-cookie";
 export default {
   components: {
     CubePage,
@@ -139,7 +203,10 @@ export default {
         title: "",
         text: "",
         html: "",
-        imgs: []
+        imgs: [],
+        isLike: false,
+        voteCounts: 0,
+        comment_counts: 0
       },
       dialog: null,
       commentForm: {
@@ -181,9 +248,7 @@ export default {
         },
         onConfirm: async (e, promptValue) => {
           this.commentForm.textValue = promptValue;
-          this.commentForm.userId = JSON.parse(
-            sessionStorage.getItem("user")
-          ).id;
+          this.commentForm.userId = Cookie.get("id");
           this.commentForm.articleId = this.$route.query.id;
 
           await this.$store.dispatch("comment/comments", {
@@ -193,6 +258,8 @@ export default {
           if (this.$store.state.comment.commentsRes.success) {
             this.dialog.hide();
             this.commentForm.textValue = "";
+
+            this.content.comment_counts++;
 
             this.loadComments();
 
@@ -207,7 +274,8 @@ export default {
     },
     async loadComments() {
       await this.$store.dispatch("comment/commentlist", {
-        articleId: this.$route.query.id
+        articleId: this.$route.query.id,
+        userId: Cookie.get("id")
       });
 
       if (this.$store.state.comment.commentListRes.success) {
@@ -219,8 +287,6 @@ export default {
      * type===0:回复楼主
      */
     replyComment(type, item) {
-      console.log(item);
-      
       this.dialog = this.$createDialog({
         type: "prompt",
         title: `@${type ? item.user_from.userName : item.user.userName}`,
@@ -246,7 +312,7 @@ export default {
           if (this.$store.state.comment.commentsRes.success) {
             this.dialog.hide();
             this.commentForm.textValue = "";
-
+            this.content.comment_counts++;
             this.loadComments();
 
             this.$createToast({
@@ -258,9 +324,58 @@ export default {
         }
       }).show();
     },
-    goUser(id){
-      console.log(id);
-      
+    async togglelike(type, item) {
+      let articleId = this.$route.query.id;
+      let userId = Cookie.get("id");
+      let commentId;
+
+      if (type === 1) {
+        commentId = item._id;
+      } else if (type === 2) {
+        commentId = item.parentcommentid;
+      }
+      if (!userId) {
+        this.$router.push("/login");
+      }
+
+      if (!articleId) {
+        return;
+      }
+
+      if (type === 0) {
+        await this.$store.dispatch("article/togglelike", {
+          articleId,
+          userId
+        });
+
+        let { isLike, success } = this.$store.state.article.toggleLikeRes;
+
+        if (success) {
+          this.content.isLike = isLike;
+
+          isLike ? this.content.voteCounts++ : this.content.voteCounts--;
+        }
+      } else if (type === 1) {
+        await this.$store.dispatch("comment/togglelike", {
+          commentId,
+          userId
+        });
+
+        let { isLike, success } = this.$store.state.comment.togglelikeRes;
+
+        if (success) {
+          this.$store.commit("comment/reloadTogglelike", {
+            commentId,
+            isLike
+          });
+        }
+      } else if (type === 2) {
+        await this.$store.dispatch("comment/togglecchildlike", {
+          commentId,
+          child_c_id: item._id,
+          userId
+        });
+      }
     }
   },
   async asyncData(context) {
@@ -268,7 +383,10 @@ export default {
     // 使用 req 和 res
 
     const { data } = await context.store.$axios.$get("/api/getSingleArticle", {
-      params: { id: context.route.query.id }
+      params: {
+        id: context.route.query.id,
+        userId: context.route.query.user_id
+      }
     });
 
     if (process.server) {
@@ -279,7 +397,10 @@ export default {
       content: {
         title: data.title,
         text: data.text,
-        html: data.html
+        html: data.html,
+        isLike: data.isLike,
+        voteCounts: data.voteCounts,
+        comment_counts: data.comment_counts
       },
       user: {
         name: data.author.userName,
@@ -363,6 +484,7 @@ export default {
                     margin-bottom: 10px;
                     display: flex;
                     align-items: center;
+                    position: relative;
                     .author-txt {
                       border: 1px solid #ff5d2c;
                       border-radius: 4px;
@@ -373,6 +495,14 @@ export default {
                     }
                     strong {
                       font-size: 1.2rem;
+                    }
+                    .operate-i {
+                      .thumb-up {
+                        position: absolute;
+                        right: 10px;
+                        color: #9e9b9b;
+                        top: 0;
+                      }
                     }
                   }
                   .comment-o-b {
@@ -402,11 +532,6 @@ export default {
                         margin-left: 10px;
                       }
                     }
-                    .operate-i {
-                      width: 20%;
-                      display: flex;
-                      justify-content: space-between;
-                    }
                   }
 
                   .comment-children-b {
@@ -422,7 +547,7 @@ export default {
                         }
                         display: flex;
                         align-items: flex-end;
-                        align-self: end
+                        align-self: end;
                       }
                       .comment-b1 {
                         width: 100%;
@@ -438,14 +563,14 @@ export default {
                             margin-left: 10px;
                             color: brown;
                           }
-                          .floorOwner-txt{
+                          .floorOwner-txt {
                             border-color: #f86f45;
-                            color: rgb(161, 86, 86)
+                            color: rgb(161, 86, 86);
                           }
-                          .thumb-up{
+                          .thumb-up {
                             position: absolute;
                             right: 10px;
-                            color: #9e9b9b
+                            color: #9e9b9b;
                           }
                         }
                         .comment {
@@ -453,9 +578,9 @@ export default {
                           width: 100%;
                           display: flex;
                           justify-content: space-between;
-                          .commentTxt{
+                          .commentTxt {
                             word-break: break-all;
-                            width: 90%
+                            width: 90%;
                           }
                           span {
                             color: #9e9b9b;

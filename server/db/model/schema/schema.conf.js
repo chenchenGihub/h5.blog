@@ -2,7 +2,7 @@
  * @Description: 原型类型定义
  * @Author: chenchen
  * @Date: 2019-04-12 20:07:01
- * @LastEditTime: 2019-05-09 23:47:41
+ * @LastEditTime: 2019-05-13 00:04:36
  */
 const {
   Schema
@@ -37,6 +37,13 @@ exports.ARTICEL_SCHEMA = {
     maxlength: [8000, "html内容不能超过8000"],
     alias: 'h'
   },
+  votesType: new Schema({
+    userId: {
+      type: String,
+      trim: true,
+      require: true,
+    }
+  }),
   hiddenType: { type: Boolean, default: false }
 };
 
@@ -95,24 +102,18 @@ exports.USER_SCHEMA = {
 
 
 exports.COMMENT_SCHEMA = {
-  votedType: [
-    {
+  /**
+  * 点赞的子文档
+  */
+  votedType:
+    new Schema({
       userId: {
         type: String,
         trim: true,
         require: true,
-      },
-      userName: {
-        type: String,
-        trim: true,
-        require: true,
-      },
-      avatar: {
-        type: String,
-        require: true
       }
-    }
-  ],
+    })
+  ,
   commentType: {
     type: String,
     trim: true,
@@ -142,6 +143,14 @@ exports.COMMENT_SCHEMA = {
   deviceType: [String],
   ipType: [String],
   articleType: Schema.Types.ObjectId,
+  isLikeType: {
+    type: Boolean,
+    default: false
+  },
+  votedCountsType: {
+    type: Number,
+    default: 0
+  },
   /**
    * 子文档
    */
@@ -176,6 +185,23 @@ exports.COMMENT_SCHEMA = {
     parentcommentid: { type: Schema.Types.ObjectId, require: true },
     commentTxt: String,
     comment: String,
+    voted:
+      [new Schema({
+        userId: {
+          type: String,
+          trim: true,
+          require: true,
+        }
+      })]
+    ,
+    isLike: {
+      type: Boolean,
+      default: false
+    },
+    votedCounts: {
+      type: Number,
+      default: 0
+    }
   }, {
       timestamps: {
         createdAt: 'createdAt',
