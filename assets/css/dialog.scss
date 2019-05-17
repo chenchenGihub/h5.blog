@@ -1,0 +1,46 @@
+.my-title{
+    height: 40px;
+    line-height: 40px;
+    border-bottom: 1px solid #eee
+}
+.my-content{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    .i-b{
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
+        margin-bottom: 10px;
+        height: 30px;
+       
+        border-radius: 4px;
+        -webkit-border-radius: 4px;
+        -moz-border-radius: 4px;
+        -ms-border-radius: 4px;
+        -o-border-radius: 4px;
+        .label{
+            width: 30%
+        }
+        .input-box{
+            height: 100%;
+            border: 1px solid #fc9153;
+            border-radius: 4px;
+            -webkit-border-radius: 4px;
+            -moz-border-radius: 4px;
+            -ms-border-radius: 4px;
+            -o-border-radius: 4px;
+            .input{
+                height: 100%;
+                padding-left: 10px;
+                border-radius: 4px;
+                -webkit-border-radius: 4px;
+                -moz-border-radius: 4px;
+                -ms-border-radius: 4px;
+                -o-border-radius: 4px;
+            }
+        }
+       
+    }
+}

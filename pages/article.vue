@@ -2,7 +2,7 @@
  * @Description: file content
  * @Author: chenchen
  * @Date: 2019-05-07 09:56:31
- * @LastEditTime: 2019-05-12 23:35:10
+ * @LastEditTime: 2019-05-16 22:14:51
  -->
 <template>
   <CubePage
@@ -175,7 +175,27 @@
           <span v-if="content.comment_counts>0">{{content.comment_counts}}</span>
           <span v-else>回复</span>
         </span>
-        <span>
+        <cube-tip
+          ref="tip2"
+          :direction="direction"
+          :style="tipStyle"
+          @close="close"
+          @click="clickHandler"
+        >
+          <div class="share-b">
+            <img
+              @click="share('wechat')"
+              src="../assets/img/wechat.png"
+              alt=""
+            >
+            <img
+              @click="share('qq')"
+              src="../assets/img/qq.png"
+              alt=""
+            >
+          </div>
+        </cube-tip>
+        <span @click="showTip('bottom')">
           <i class="fa fa-edit"></i>
           <span>转发</span>
         </span>
@@ -231,10 +251,29 @@ export default {
           txt: "更新成功"
         },
         pullUpLoad: true
-      }
+      },
+      tipStyle: null,
+      direction: ""
     };
   },
   methods: {
+    showTip(direction) {
+      this.direction = direction;
+      this.$refs.tip2.show();
+      this.tipStyle = "right: 30px; top: -40px;";
+    },
+    share(type) {
+      switch (type) {
+        case "qq":
+          break;
+        case "wechat":
+          break;
+        default:
+          break;
+      }
+    },
+    close() {},
+    clickHandler() {},
     onPullingUp() {
       this.loadComments();
     },
@@ -375,9 +414,19 @@ export default {
           child_c_id: item._id,
           userId
         });
+
+        let { isLike, success } = this.$store.state.comment.togglecchildlikeRes;
+
+        if (success) {
+          this.$store.commit("comment/reloadCTogglelike", {
+            commentId: item._id,
+            isLike
+          });
+        }
       }
     }
   },
+
   async asyncData(context) {
     // 请检查您是否在服务器端
     // 使用 req 和 res
@@ -606,6 +655,12 @@ export default {
     justify-content: space-evenly;
     align-items: center;
     background: #fff;
+    .share-b {
+      img {
+        width: 20px;
+        height: 20px;
+      }
+    }
   }
 }
 </style>

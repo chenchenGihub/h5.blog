@@ -2,7 +2,7 @@
  * @Description: 文章的状态管理
  * @Author: chenchen
  * @Date: 2019-03-28 19:55:16
- * @LastEditTime: 2019-05-12 23:38:58
+ * @LastEditTime: 2019-05-13 09:25:23
  */
 import Cookies from 'js-cookie'
 
@@ -18,7 +18,7 @@ export const state = () => ({
     success: false,
     isLike: false
   },
-  togglecchildlikeRes:{
+  togglecchildlikeRes: {
     success: false,
     isLike: false
   }
@@ -50,8 +50,37 @@ export const mutations = {
     }
   },
   togglecchildlike(state, pl) {
-    state.togglecchildlike.success = pl.success;
+    state.togglecchildlikeRes.success = pl.success;
     state.togglecchildlikeRes.isLike = pl.data.isLike;
+
+  },
+  reloadCTogglelike(state, pl) {
+
+   
+   
+   
+    
+
+    state.commentListRes.commentList.forEach(element => {
+
+      if (element.children_comment.length > 0) {
+
+        element.children_comment.find(v => v._id === pl.commentId).isLike = pl.isLike;
+
+       
+        
+
+        if (pl.isLike) {
+          (element.children_comment.find(v => v._id === pl.commentId)).votedCounts++
+        } else {
+          (element.children_comment.find(v => v._id === pl.commentId)).votedCounts--
+        }
+      }
+      
+    });
+
+
+
   }
 }
 

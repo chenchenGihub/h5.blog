@@ -2,7 +2,7 @@
  * @Description: file content
  * @Author: chenchen
  * @Date: 2019-05-07 09:56:31
- * @LastEditTime: 2019-05-09 11:41:05
+ * @LastEditTime: 2019-05-17 01:30:45
  -->
 <template>
   <CubePage
@@ -51,7 +51,7 @@
         </div>
 
         <section class="other-operate">
-          <div>注册</div>
+          <div @click="showSlot">注册</div>
           <div>忘记密码</div>
         </section>
 
@@ -132,25 +132,26 @@ export default {
     async submit() {
       if (!this.loginForm.checked) {
         const toast = this.$createToast({
-         type: 'txt',
+          type: "txt",
           txt: "请勾选协议"
         });
         toast.show();
 
-        return
+        return;
       }
 
       await this.$store.dispatch("user/login", this.loginForm);
 
       if (this.$store.state.user.userInfo.success) {
-
-        sessionStorage.setItem("user",JSON.stringify(this.$store.state.user.userInfo))
+        sessionStorage.setItem(
+          "user",
+          JSON.stringify(this.$store.state.user.userInfo)
+        );
 
         this.$router.go(-1);
-        
-      }else{
-         const toast = this.$createToast({
-         type: 'txt',
+      } else {
+        const toast = this.$createToast({
+          type: "txt",
           txt: `${this.$store.state.user.userInfo.errorTxt}`
         });
         toast.show();
@@ -158,6 +159,165 @@ export default {
     },
     check(e) {
       console.log(222);
+    },
+    changeHandler(e) {
+      console.log(e);
+    },
+    showSlot() {
+      this.$createDialog(
+        {
+          type: "prompt",
+          confirmBtn: {
+            text: "确认",
+            active: true
+          },
+          cancelBtn: {
+            text: "取消",
+            active: true
+          },
+          onConfirm: async () => {
+            let username = document.querySelector("#username").value.trim();
+            let pwd = document.querySelector("#pwd").value.trim();
+            await this.$store.dispatch("user/register", { username, pwd });
+
+           
+
+            this.$createToast({
+              type: "warn",
+              time: 1000,
+              txt: "注册成功"
+            }).show();
+          }
+        },
+        createElement => {
+          return [
+            createElement(
+              "div",
+              {
+                class: {
+                  "my-title": true
+                },
+                slot: "title"
+              },
+              [createElement("p", "注册")]
+            ),
+            createElement(
+              "p",
+              {
+                class: {
+                  "my-content": true
+                },
+                slot: "content"
+              },
+              [
+                createElement(
+                  "div",
+                  {
+                    class: {
+                      "input-box": true
+                    }
+                  },
+                  [
+                    // 用户名
+                    createElement(
+                      "div",
+                      {
+                        class: {
+                          "i-b": true
+                        }
+                      },
+                      [
+                        createElement(
+                          "div",
+                          {
+                            class: {
+                              label: true
+                            },
+                            style: {
+                              "margin-right": "10px"
+                            }
+                          },
+                          "用户名"
+                        ),
+                        createElement(
+                          "div",
+                          {
+                            class: "input-box"
+                          },
+                          [
+                            createElement("input", {
+                              class: {
+                                input: true
+                              },
+                              attrs: {
+                                type: "text",
+                                placeholder: "请输入用户名",
+                                id: "username",
+                                autocomplete: "off"
+                              },
+                              style: {
+                                outline: "none"
+                              }
+                            })
+                          ]
+                        )
+                      ]
+                    ),
+                    // 密码
+                    createElement(
+                      "div",
+                      {
+                        class: {
+                          "i-b": true
+                        }
+                      },
+                      [
+                        createElement(
+                          "div",
+                          {
+                            class: {
+                              label: true
+                            },
+                            style: {
+                              "margin-right": "10px"
+                            }
+                          },
+                          "密码"
+                        ),
+                        createElement(
+                          "div",
+                          {
+                            class: "input-box"
+                          },
+                          [
+                            createElement("input", {
+                              class: {
+                                input: true
+                              },
+                              style: {
+                                outline: "none"
+                              },
+                              attrs: {
+                                type: "password",
+                                placeholder: "请输入密码",
+                                id: "pwd",
+                                autocomplete: "new-password"
+                              },
+                              on: {
+                                change: this.changeHandler
+                              }
+                            })
+                          ]
+                        )
+                      ]
+                    )
+                  ]
+                )
+              ]
+            )
+          ];
+        }
+      ).show();
     }
   }
 };

@@ -2,7 +2,7 @@
  * @Description: 评论api
  * @Author: chenchen
  * @Date: 2019-04-24 22:15:40
- * @LastEditTime: 2019-05-13 08:49:49
+ * @LastEditTime: 2019-05-13 09:14:41
  */
 const { Router } = require('express');
 const mongoose = require('mongoose');
@@ -260,9 +260,11 @@ router.put('/togglecchildlike', async (req, res, next) => {
 
     cdoc = await Comment.findById({ _id: commentId });
 
+    
 
     if (cdoc.children_comment.id(child_c_id).voted.id(userId)) {
-        cdoc.children_comment.id(child_c_id).voted.pull(userId)
+        cdoc.children_comment.id(child_c_id).voted.id(userId).remove();
+        isLike = false;
     } else {
         cdoc.children_comment.id(child_c_id).voted.push(userId)
         cdoc.children_comment.id(child_c_id).voted[0];
