@@ -41,11 +41,11 @@ router.put('/register', async (req, res, next) => {
   }
 
   User.userName = req.body.userName;
-  User.email = req.body.email;
+  // User.email = req.body.email;
   User.password = req.body.password;
-  User.token = req.body.token;
-  User.device.push(req.body.device);
-  User.ip.push(req.body.ip);
+  // User.token = req.body.token;
+  // User.device.push(req.body.device);
+  // User.ip.push(req.body.ip);
 
   try {
     data = await User.save();

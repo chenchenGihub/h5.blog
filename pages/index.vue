@@ -5,143 +5,100 @@
  * @LastEditTime: 2019-05-11 11:23:40
  -->
 <template>
-  <CubePage
-    type="scroll-view"
-    class="mainpage"
-  >
-
+  <CubePage type="scroll-view" class="mainpage">
     <template slot="header">
       <Header>
         <template>
-          <div>
-            主页
-          </div>
+          <div>主页</div>
         </template>
         <template v-slot:right>
-          <div
-            class="publish"
-            @click="publish"
-          >
-            发布
-          </div>
+          <div class="publish" @click="publish">发布</div>
         </template>
       </Header>
     </template>
 
     <template slot="content">
-       <main class="contents">
-      <div class="content-scroll-wrapper">
-        <div
-          class="content-scroll-list-wrap"
-          ref="scrollWrapper"
-        >
-          <cube-scroll
-            ref="contentScroll"
-            :data="content"
-            :options="options"
-            @pulling-down="onPullingDown"
-            @pulling-up="onPullingUp"
-          >
-            <ul class="imgs-wrapper">
-              <li
-                v-for="(item, index) in content"
-                :key="index"
-                class="imgs-item"
-              >
-                <section class="item-box">
-                  <header class="item-header">
-                    <div class="avatar-box">
-                      <img
-                        :src="item.user.avatar"
-                        alt=""
-                        srcset=""
-                      >
-                    </div>
-                    <div class="username">
-                      <section>{{item.user.name}}</section>
-                      <section>{{item.user.description}}</section>
-                    </div>
-                  </header>
-                  <section class="title">{{item.title}}</section>
-                  <section
-                    class="content1"
-                    @click="goDetail(item)"
-                  >
-                    <section
-                      v-if="item.imgs.length<=1"
-                      class="contentemplisis"
-                    >{{item.text.substring(0,100)}}{{item.text.length>100?"...":''}}</section>
-                    <section
-                      class="img-w"
-                      v-if="item.imgs.length>=1"
-                    >
-                      <div
-                        class="img-b"
-                        v-for="(item, index) in item.imgs"
-                        :key="index"
-                      >
-                        <img
-                          :src="item"
-                          alt=""
-                          srcset=""
-                        >
-                      </div>
-
-                    </section>
-                  </section>
-
-                  <footer class="operate">
-                    <span><i class="fa fa-thumbs-up"></i> <span>赞</span></span>
-                    <span><i class="fa fa-comment"></i> 回复</span>
-                  </footer>
-                </section>
-              </li>
-            </ul>
-            <template
-              slot="pulldown"
-              slot-scope="props"
+      <main class="contents">
+        <div class="content-scroll-wrapper">
+          <div class="content-scroll-list-wrap" ref="scrollWrapper">
+            <cube-scroll
+              ref="contentScroll"
+              :data="content"
+              :options="options"
+              @pulling-down="onPullingDown"
+              @pulling-up="onPullingUp"
             >
-              <div
-                v-if="props.pullDownRefresh"
-                class="cube-pulldown-wrapper"
-                :style="props.pullDownStyle"
-              >
+              <ul class="imgs-wrapper">
+                <li v-for="(item, index) in content" :key="index" class="imgs-item">
+                  <section class="item-box">
+                    <header class="item-header">
+                      <div class="avatar-box">
+                        <img :src="item.user.avatar" alt srcset>
+                      </div>
+                      <div class="username">
+                        <section>{{item.user.name}}</section>
+                        <section>{{item.user.description}}</section>
+                      </div>
+                    </header>
+                    <section class="title">{{item.title}}</section>
+                    <section class="content1" @click="goDetail(item)">
+                      <section
+                        v-if="item.imgs.length<=1"
+                        class="contentemplisis"
+                      >{{item.text.substring(0,100)}}{{item.text.length>100?"...":''}}</section>
+                      <section class="img-w" v-if="item.imgs.length>=1">
+                        <div class="img-b" v-for="(item, index) in item.imgs" :key="index">
+                          <img :src="item" alt srcset>
+                        </div>
+                      </section>
+                    </section>
+
+                    <footer class="operate">
+                      <span>
+                        <i class="fa fa-thumbs-up"></i>
+                        <span>赞</span>
+                      </span>
+                      <span>
+                        <i class="fa fa-comment"></i> 回复
+                      </span>
+                    </footer>
+                  </section>
+                </li>
+              </ul>
+              <template slot="pulldown" slot-scope="props">
                 <div
-                  v-if="props.beforePullDown"
-                  class="before-trigger"
-                  :style="{paddingTop: props.bubbleY + 'px'}"
-                >
-                  <span :class="{rotate: props.bubbleY > 0}">↓</span>
-                </div>
-                <div
-                  class="after-trigger"
-                  v-else
+                  v-if="props.pullDownRefresh"
+                  class="cube-pulldown-wrapper"
+                  :style="props.pullDownStyle"
                 >
                   <div
-                    v-show="props.isPullingDown"
-                    class="loading"
+                    v-if="props.beforePullDown"
+                    class="before-trigger"
+                    :style="{paddingTop: props.bubbleY + 'px'}"
                   >
-                    <cube-loading></cube-loading>
+                    <span :class="{rotate: props.bubbleY > 0}">↓</span>
                   </div>
-                  <!-- <transition name="success"> -->
-                  <div
-                    v-show="!props.isPullingDown"
-                    class="text-wrapper"
-                  ><span class="refresh-text">今日头条推荐引擎有x条更新</span></div>
-                  <!-- </transition> -->
+                  <div class="after-trigger" v-else>
+                    <div v-show="props.isPullingDown" class="loading">
+                      <cube-loading></cube-loading>
+                    </div>
+                    <!-- <transition name="success"> -->
+                    <div v-show="!props.isPullingDown" class="text-wrapper">
+                      <span class="refresh-text">博客有{{1}}条更新</span>
+                    </div>
+                    <!-- </transition> -->
+                  </div>
                 </div>
-              </div>
-            </template>
-          </cube-scroll>
+              </template>
+            </cube-scroll>
+          </div>
         </div>
-      </div>
-       </main>
+      </main>
     </template>
 
     <template slot="footer">
       <TabBar></TabBar>
     </template>
-
   </CubePage>
 </template>
 
@@ -149,7 +106,7 @@
 import CubePage from "~/components/CubePage.vue";
 import Header from "~/components/Header.vue";
 import TabBar from "~/components/TabBar.vue";
-import Cookie from 'js-cookie';
+import Cookie from "js-cookie";
 export default {
   components: {
     Header,
@@ -159,6 +116,7 @@ export default {
   data() {
     return {
       content: [],
+      searchValue: { skip: 0, count: 10 },
       options: {
         pullDownRefresh: {
           threshold: 60,
@@ -173,17 +131,16 @@ export default {
   },
   methods: {
     async onPullingDown() {
-      console.log();
+   
+     await this.$store.dispatch("article/getArticle", {
+        params: { skip: 0, count: 10 }
+      });
 
-      // this.$store.dispatch("");
+      let {articelList,total,success} = this.$store.state.article.articelListRes
 
-      setTimeout(() => {
-        // this.$refs.contentScroll.forceUpdate()
+      this.content = [...articelList]
 
-        this.content.unshift();
-
-        this.$refs.contentScroll.scrollTo(0, this.secondStop, 300);
-      }, 1000);
+      this.$refs.contentScroll.scrollTo(0, this.secondStop, 300);
     },
     onPullingUp() {
       setTimeout(() => {
@@ -199,15 +156,11 @@ export default {
       this.$router.push("./publish");
     },
     goDetail(item) {
-      
-     
-      
-      
       this.$router.push({
         path: "./article",
         query: {
           id: item._id,
-          user_id:Cookie.get('id')
+          user_id: Cookie.get("id")
         }
       });
     }
@@ -346,11 +299,14 @@ export default {
             }
           }
           .after-trigger {
-            flex: 1;
+            display: flex;
+            justify-content: center;
+            width: 100%;
             margin-top: 12px;
             margin-bottom: 10px;
 
             .text-wrapper {
+              width: 100%;
               margin: 0 auto;
               margin-top: 14px;
               margin-bottom: 14px;
@@ -358,10 +314,6 @@ export default {
               padding-top: 14px;
               color: #498ec2;
               background-color: #d6eaf8;
-              // position: absolute;
-              // top: 0;
-              // z-index: 50;
-              // width: 100%
             }
             .cube-loading-spinners {
               margin: auto;

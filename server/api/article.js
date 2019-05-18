@@ -56,7 +56,7 @@ router.get('/article', async (req, res, next) => {
 
 
     res.json({
-        success: false,
+        success: true,
         data: { articles, total },
         errorCode: null,
         errorMsg: null,

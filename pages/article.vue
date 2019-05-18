@@ -426,7 +426,19 @@ export default {
       }
     }
   },
+  mounted(){
+    let viewPortHeight = Math.max(document.documentElement.clientHeight,document.body.clientHeight);
 
+      let { bottom, top } = document.querySelector('.seperater').getBoundingClientRect();
+
+     
+
+      if (bottom>0&&top<viewPortHeight) {
+        this.loadComments();
+      }
+
+   
+  },
   async asyncData(context) {
     // 请检查您是否在服务器端
     // 使用 req 和 res

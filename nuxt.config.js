@@ -21,7 +21,8 @@ module.exports = {
       { hid: 'description', name: 'description', content: pkg.description }
     ],
     link: [
-      { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }
+      { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
+      { rel: 'stylesheet', href: 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css' }
     ]
   },
 
@@ -37,7 +38,6 @@ module.exports = {
     'quill/dist/quill.bubble.css',
     'quill/dist/quill.core.css',
     'highlight.js/styles/xcode.css',
-    '@fortawesome/fontawesome-free/css/all.css',
     '~/assets/css/dialog.scss',
   ],
 
@@ -74,7 +74,7 @@ module.exports = {
 
       config.resolve.alias['cube-ui'] = 'cube-ui/lib';
 
-      config.plugins.push(new TransformModulesPlugin())
+      // config.plugins.push(new TransformModulesPlugin())
     }
   }
 }

@@ -5,11 +5,7 @@
  * @LastEditTime: 2019-05-17 01:30:45
  -->
 <template>
-  <CubePage
-    type="scroll-view"
-    class="mainpage"
-  >
-
+  <CubePage type="scroll-view" class="mainpage">
     <!-- <cube-form
       :model="model"
       :schema="schema"
@@ -18,36 +14,22 @@
       @validate="validateHandler"
       @submit="submitHandler"
       @reset="resetHandler"
-    > -->
+    >-->
 
     <template slot="content">
-
-      <header class="account-t">
-        账号密码登录
-      </header>
+      <header class="account-t">账号密码登录</header>
       <main class="main-box">
         <section class="loginform-b">
           <div class="loginform">
-            <cube-input
-              v-model="loginForm.userName"
-              clearable
-              placeholder="请输入用户名"
-            ></cube-input>
+            <cube-input v-model="loginForm.userName" clearable placeholder="请输入用户名"></cube-input>
           </div>
           <div class="loginform">
-            <cube-input
-              v-model="loginForm.password"
-              clearable
-              placeholder="请输入密码"
-            ></cube-input>
+            <cube-input v-model="loginForm.password" clearable placeholder="请输入密码"></cube-input>
           </div>
         </section>
 
         <div class="btn-group">
-          <cube-button
-            :disabled="!loginForm.password || !loginForm.userName "
-            @click="submit"
-          >登录</cube-button>
+          <cube-button :disabled="!loginForm.password || !loginForm.userName " @click="submit">登录</cube-button>
         </div>
 
         <section class="other-operate">
@@ -56,31 +38,22 @@
         </section>
 
         <section class="social-t">
-          <div class="line" />
+          <div class="line"/>
           <div class="social-c">社交账号登录</div>
-          <div class="line" />
+          <div class="line"/>
         </section>
 
         <section class="social-i-b">
           <div class="wechat-b">
-            <img
-              src="../assets/img/wechat.png"
-              alt=""
-            >
+            <img src="../assets/img/wechat.png" alt>
             <span>微信</span>
           </div>
           <div class="qq-b">
-            <img
-              src="../assets/img/qq.png"
-              alt=""
-            >
+            <img src="../assets/img/qq.png" alt>
             <span>QQ</span>
           </div>
           <div class="weibo-b">
-            <img
-              src="../assets/img/weibo.png"
-              alt=""
-            >
+            <img src="../assets/img/weibo.png" alt>
             <span>微博</span>
           </div>
         </section>
@@ -93,20 +66,14 @@
             shape="square"
             :hollow-style="true"
           >
-            请勾选代表你同意 <a
-              href="javascript:;"
-              @click.stop="check(0)"
-            >用户协议</a> 和 <a
-              href="javascript:;"
-              @click.stop="check(1)"
-            >隐私政策</a>
+            请勾选代表你同意
+            <a href="javascript:;" @click.stop="check(0)">用户协议</a> 和
+            <a href="javascript:;" @click.stop="check(1)">隐私政策</a>
           </cube-checkbox>
         </section>
-
       </main>
     </template>
     <!-- </cube-form> -->
-
   </CubePage>
 </template>
 <script>
@@ -161,7 +128,30 @@ export default {
       console.log(222);
     },
     changeHandler(e) {
-      console.log(e);
+      let pwd = document.querySelector("#pwd").value.trim();
+
+      if (pwd) {
+        document.querySelector("#pwdicon").style.opacity = 1;
+      } else {
+        document.querySelector("#pwdicon").style.opacity = 0;
+      }
+    },
+    changeHandler1(e) {
+      let username = document.querySelector("#username").value.trim();
+
+      if (username) {
+        document.querySelector("#usericon").style.opacity = 1;
+      } else {
+        document.querySelector("#usericon").style.opacity = 0;
+      }
+    },
+    delete1(type) {
+      document.querySelector("#username").value = "";
+      document.querySelector("#usericon").style.opacity = 0;
+    },
+    delete2(type) {
+      document.querySelector("#pwd").value = "";
+      document.querySelector("#pwdicon").style.opacity = 0;
     },
     showSlot() {
       this.$createDialog(
@@ -178,15 +168,18 @@ export default {
           onConfirm: async () => {
             let username = document.querySelector("#username").value.trim();
             let pwd = document.querySelector("#pwd").value.trim();
-            await this.$store.dispatch("user/register", { username, pwd });
+            await this.$store.dispatch("user/register", {
+              userName: username,
+              password: pwd
+            });
 
-           
-
-            this.$createToast({
-              type: "warn",
-              time: 1000,
-              txt: "注册成功"
-            }).show();
+            if (this.$store.state.user.registerState.success) {
+              this.$createToast({
+                type: "warn",
+                time: 1000,
+                txt: "注册成功"
+              }).show();
+            }
           }
         },
         createElement => {
@@ -257,6 +250,25 @@ export default {
                               },
                               style: {
                                 outline: "none"
+                              },
+                              on: {
+                                input: this.changeHandler1
+                              }
+                            }),
+                            createElement("i", {
+                              class: {
+                                fa: true,
+                                "fa-close": true
+                              },
+                              style: {
+                                "margin-right": "10px",
+                                opacity: 0
+                              },
+                              attrs: {
+                                id: "usericon"
+                              },
+                              on: {
+                                click: this.delete1
                               }
                             })
                           ]
@@ -304,7 +316,23 @@ export default {
                                 autocomplete: "new-password"
                               },
                               on: {
-                                change: this.changeHandler
+                                input: this.changeHandler
+                              }
+                            }),
+                            createElement("i", {
+                              class: {
+                                fa: true,
+                                "fa-close": true
+                              },
+                              style: {
+                                "margin-right": "10px",
+                                opacity: 0
+                              },
+                              attrs: {
+                                id: "pwdicon"
+                              },
+                              on: {
+                                click: this.delete2
                               }
                             })
                           ]

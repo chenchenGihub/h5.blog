@@ -30,9 +30,10 @@ export const state = () => ({
 
 export const mutations = {
   getArticle(state, pl) {
+  
     state.articelListRes.articelList = [...pl.data.articles];
     state.articelListRes.total = pl.data.total;
-    state.articelListRes.success = true;
+    state.articelListRes.success = pl.success;
   },
   publishArticle(state,payload){
     state.publishArticleRes.success = payload.success
@@ -58,9 +59,7 @@ export const actions = {
   }, params) {
     let data
     try {
-      data = await this.$axios.$get('/api/article',{
-        params: params
-      });
+      data = await this.$axios.$get('/api/article',params);
       commit('getArticle', data)
     } catch (error) {
      

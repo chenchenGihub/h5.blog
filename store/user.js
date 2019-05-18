@@ -14,10 +14,10 @@ const defaultUserinfo = {
 }
 export const state = () => ({
   registerState: {
-    success: null
+    success: false
   },
   checknameState: {
-    success: null
+    success: false
   },
   userInfo: defaultUserinfo
 })
@@ -32,8 +32,7 @@ export const mutations = {
   },
   login(state, payload) {
     
-    console.log(payload);
-
+  
     state.userInfo.success = payload.success;
     if (state.userInfo.success) {
       state.userInfo.avatarUrl = payload.data.avatarUrl;
@@ -54,8 +53,7 @@ export const mutations = {
   },
   logout(state, payload) {
 
-    console.log(payload);
-    
+  
     state.userInfo = { ...defaultUserinfo }
   },
   user(state, payload){
@@ -69,10 +67,8 @@ export const actions = {
     commit
   }, params) {
 
-    const ip = await this.$axios.$get("http://icanhazip.com");
-
-    params.ip = ip;
-
+  
+   
     const data = await this.$axios.$put('/api/register', params);
 
     commit('register', data);
