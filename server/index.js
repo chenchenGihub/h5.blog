@@ -14,7 +14,7 @@ const {
 } = require('nuxt')
 const app = express()
 const bodyParser = require('body-parser')
-
+const proxy = require('http-proxy-middleware');
 // Import and Set Nuxt.js options
 let config = require('../nuxt.config.js')
 config.dev = !(process.env.NODE_ENV === 'production')
@@ -62,6 +62,7 @@ async function start() {
   //将前端json参数转换为json或者是urlencoded
   app.use(bodyParser.json())
 
+  app.use('/api', proxy({target: 'http://localhost:3000', changeOrigin: true}));
   
 
   app.use('/api', (req,res,next)=>{
