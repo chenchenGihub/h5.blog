@@ -2,7 +2,7 @@
  * @Description: file content
  * @Author: chenchen
  * @Date: 2019-04-10 18:50:38
- * @LastEditTime: 2019-05-24 21:33:08
+ * @LastEditTime: 2019-05-09 09:40:20
  */
 const http = require('http')
 const express = require('express')
@@ -65,7 +65,8 @@ async function start() {
   // app.use('/api', proxy({target: 'http://localhost:3000', changeOrigin: true}));
   
   
-  app.use(`${config.env.baseUrl}/api`, (req,res,next)=>{
+
+  app.use('http://h5blog.chenes.top/api', (req,res,next)=>{
 
 
 
