@@ -2,13 +2,18 @@
  * @Description: file content
  * @Author: chenchen
  * @Date: 2019-05-02 19:47:28
- * @LastEditTime: 2019-05-16 23:22:11
+ * @LastEditTime: 2019-05-23 11:15:24
  */
 const pkg = require('./package');
 var TransformModulesPlugin = require('webpack-transform-modules-plugin');
 
 module.exports = {
   mode: 'universal',
+
+  server: {
+    port: 3001, // 定义 输出端口 ，默认为3000
+    host:"localhost" // 定义 输出 ip
+    },
 
   /*
   ** Headers of the page

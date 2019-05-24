@@ -2,7 +2,7 @@
  * @Description: 主页
  * @Author: chenchen
  * @Date: 2019-05-02 19:47:28
- * @LastEditTime: 2019-05-11 11:23:40
+ * @LastEditTime: 2019-05-19 19:00:03
  -->
 <template>
   <CubePage type="scroll-view" class="mainpage">
@@ -136,11 +136,12 @@ export default {
         params: { skip: 0, count: 10 }
       });
 
-      let {articelList,total,success} = this.$store.state.article.articelListRes
+      let {articelList,total,success} = this.$store.state.article.articelListRes;
 
-      this.content = [...articelList]
+      this.content = [...articelList];
 
       this.$refs.contentScroll.scrollTo(0, this.secondStop, 300);
+      
     },
     onPullingUp() {
       setTimeout(() => {
