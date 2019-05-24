@@ -66,7 +66,7 @@ async function start() {
   
   
 
-  app.use('http://h5blog.chenes.top/api', (req,res,next)=>{
+  app.use('/api', (req,res,next)=>{
 
 
 

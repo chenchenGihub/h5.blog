@@ -443,7 +443,7 @@ export default {
     // 请检查您是否在服务器端
     // 使用 req 和 res
 
-    const { data } = await context.store.$axios.$get("http://h5blog.chenes.top/api/getSingleArticle", {
+    const { data } = await context.store.$axios.$get("/api/getSingleArticle", {
       params: {
         id: context.route.query.id,
         userId: context.route.query.user_id
