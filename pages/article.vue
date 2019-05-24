@@ -664,7 +664,7 @@ export default {
     height: 44px;
     width: 100%;
     display: flex;
-    justify-content: space-evenly;
+    justify-content: space-around;
     align-items: center;
     background: #fff;
     .share-b {
