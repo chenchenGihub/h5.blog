@@ -10,10 +10,10 @@ var TransformModulesPlugin = require('webpack-transform-modules-plugin');
 module.exports = {
   mode: 'universal',
 
-  // server: {
-  //   port: 3000, // 定义 输出端口 ，默认为3000
-  //   host:"localhost" // 定义 输出 ip
-  //   },
+  server: {
+    port: 3000, // 定义 输出端口 ，默认为3000
+    host:"47.96.92.177" // 定义 输出 ip
+    },
 
   /*
   ** Headers of the page
@@ -30,6 +30,9 @@ module.exports = {
       { rel: 'stylesheet', href: 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css' }
     ]
   },
+  // env: {
+  //   baseUrl: process.env.BASE_URL
+  // },
 
   /*
   ** Customize the progress-bar color

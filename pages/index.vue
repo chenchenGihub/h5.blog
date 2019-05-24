@@ -170,7 +170,7 @@ export default {
     // 请检查您是否在服务器端
     // 使用 req 和 res
 
-    const data = await context.store.$axios.$get("http://h5blog.chenes.top/api/article", {
+    const data = await context.store.$axios.$get("/api/article", {
       params: { skip: 0, count: 10 }
     });
 
