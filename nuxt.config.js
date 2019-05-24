@@ -10,10 +10,10 @@ var TransformModulesPlugin = require('webpack-transform-modules-plugin');
 module.exports = {
   mode: 'universal',
 
-  server: {
-    port: 3000, // 定义 输出端口 ，默认为3000
-    host:"localhost" // 定义 输出 ip
-    },
+  // server: {
+  //   port: 3000, // 定义 输出端口 ，默认为3000
+  //   host:"localhost" // 定义 输出 ip
+  //   },
 
   /*
   ** Headers of the page
