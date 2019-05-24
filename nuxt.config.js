@@ -2,7 +2,7 @@
  * @Description: file content
  * @Author: chenchen
  * @Date: 2019-05-02 19:47:28
- * @LastEditTime: 2019-05-24 21:31:51
+ * @LastEditTime: 2019-05-24 21:40:02
  */
 const pkg = require('./package');
 var TransformModulesPlugin = require('webpack-transform-modules-plugin');
@@ -79,7 +79,7 @@ module.exports = {
 
       config.resolve.alias['cube-ui'] = 'cube-ui/lib';
 
-      config.plugins.push(new TransformModulesPlugin())
+      // config.plugins.push(new TransformModulesPlugin())
     }
   }
 }
