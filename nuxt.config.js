@@ -12,7 +12,7 @@ module.exports = {
 
   server: {
     port: 3000, // 定义 输出端口 ，默认为3000
-    host:"47.96.92.177" // 定义 输出 ip
+    host:"localhost" // 定义 输出 ip
     },
 
   /*
@@ -30,9 +30,9 @@ module.exports = {
       { rel: 'stylesheet', href: 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css' }
     ]
   },
-  // env: {
-  //   baseUrl: process.env.BASE_URL
-  // },
+  env: {
+    baseUrl: 'http://h5blog.chenes.top/'
+  },
 
   /*
   ** Customize the progress-bar color

@@ -64,8 +64,8 @@ async function start() {
 
   // app.use('/api', proxy({target: 'http://localhost:3000', changeOrigin: true}));
   
-
-  app.use('/api', (req,res,next)=>{
+  
+  app.use(`${config.env.baseUrl}/api`, (req,res,next)=>{
 
 
 
