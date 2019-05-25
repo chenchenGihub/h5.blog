@@ -2,7 +2,7 @@
  * @Description: 集中配置http请求
  * @Author: chenchen
  * @Date: 2019-03-27 21:17:23
- * @LastEditTime: 2019-05-08 10:12:15
+ * @LastEditTime: 2019-05-25 20:47:32
  */
 
 import Cookie from 'js-cookie';
@@ -12,13 +12,14 @@ export default function (ctx) {
     const { $axios, redirect, store } = ctx;
 
     // console.log(ctx);
-    
+
 
     $axios.onRequest(config => {
 
+        $axios.setToken(Cookie.get("auth") || '', 'Bearer')
 
-            
-        config.headers.Authorization = Cookie.get("auth") || '';
+        // config.headers.Authorization = Cookie.get("auth") || '';
+
 
     });
 
@@ -34,7 +35,7 @@ export default function (ctx) {
             if (response.data.code === 10004 || response.data.code === 10005) {
 
                 redirect('/');
-            } 
+            }
         }
 
     });
