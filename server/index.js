@@ -82,10 +82,10 @@ async function start() {
 
 
   // Listen the server
-  server.listen(port)
+  server.listen(port, 'http://h5blog.chenes.top')
 
   consola.ready({
-    message: `Server listening on http://:${port}`,
+    message: `Server listening on http://${host}:${port}`,
     badge: true
   })
 
