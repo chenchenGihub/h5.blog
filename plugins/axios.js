@@ -2,7 +2,7 @@
  * @Description: 集中配置http请求
  * @Author: chenchen
  * @Date: 2019-03-27 21:17:23
- * @LastEditTime: 2019-05-25 20:47:32
+ * @LastEditTime: 2019-05-25 23:19:25
  */
 
 import Cookie from 'js-cookie';
@@ -34,7 +34,7 @@ export default function (ctx) {
 
             if (response.data.code === 10004 || response.data.code === 10005) {
 
-                redirect('/');
+                redirect('/login');
             }
         }
 
