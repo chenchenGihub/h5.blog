@@ -2,7 +2,7 @@
  * @Description: file content
  * @Author: chenchen
  * @Date: 2019-05-02 19:47:28
- * @LastEditTime: 2019-05-25 20:48:48
+ * @LastEditTime: 2019-05-25 21:44:03
  */
 const pkg = require('./package');
 var TransformModulesPlugin = require('webpack-transform-modules-plugin');
@@ -79,8 +79,9 @@ module.exports = {
 // ],
   axios: {
     // proxyHeaders: false
-    baseURL:'http://h5blog.chenes.top/',
-    progress:true
+    baseURL: process.env.BASE_URL || 'http://localhost:3000',
+    progress:true,
+    retry: { retries: 3 }
   },
 
   /*
