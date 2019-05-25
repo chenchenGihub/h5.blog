@@ -2,7 +2,7 @@
  * @Description: 用户相关的api
  * @Author: chenchen
  * @Date: 2019-04-12 20:07:01
- * @LastEditTime: 2019-05-08 09:30:19
+ * @LastEditTime: 2019-05-25 22:48:12
  */
 const {
   Router
@@ -39,6 +39,9 @@ router.put('/register', async (req, res, next) => {
       msg: errorMsg.NOT_EXSIT
     })
   }
+
+  console.log(req.body);
+  
 
   User.userName = req.body.userName;
   // User.email = req.body.email;

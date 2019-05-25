@@ -2,7 +2,7 @@
  * @Description: 原型类型定义
  * @Author: chenchen
  * @Date: 2019-04-12 20:07:01
- * @LastEditTime: 2019-05-13 00:04:36
+ * @LastEditTime: 2019-05-25 22:49:32
  */
 const {
   Schema
@@ -52,7 +52,7 @@ exports.USER_SCHEMA = {
     type: String,
     trim: true,
     require: true,
-    minlength: [6, "账号长度必须大于等于6位"],
+    minlength: [3, "账号长度必须大于等于3位"],
     maxlength: [10, "账号长度必须小于等于10位"]
   },
   avatarUrlType: {
