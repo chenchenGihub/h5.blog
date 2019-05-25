@@ -2,7 +2,7 @@
  * @Description: 原型类型定义
  * @Author: chenchen
  * @Date: 2019-04-12 20:07:01
- * @LastEditTime: 2019-05-25 22:49:32
+ * @LastEditTime: 2019-05-25 22:54:11
  */
 const {
   Schema
@@ -23,7 +23,7 @@ exports.ARTICEL_SCHEMA = {
   contentType: {
     type: String,
     trim: true,
-    maxlength: [8000, "文本内容不能超过8000"],
+    maxlength: [18000, "文本内容不能超过18000"],
     alias: 'c'
   },
   imgType: {
@@ -34,7 +34,7 @@ exports.ARTICEL_SCHEMA = {
     trim: true,
     require: true,
     minlength: [1, "html内容必填"],
-    maxlength: [8000, "html内容不能超过8000"],
+    maxlength: [18000, "html内容不能超过18000"],
     alias: 'h'
   },
   votesType: new Schema({
