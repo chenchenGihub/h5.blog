@@ -2,7 +2,7 @@
  * @Description: file content
  * @Author: chenchen
  * @Date: 2019-05-02 19:47:28
- * @LastEditTime: 2019-05-25 22:00:19
+ * @LastEditTime: 2019-05-25 22:08:33
  */
 const pkg = require('./package');
 var TransformModulesPlugin = require('webpack-transform-modules-plugin');
@@ -77,12 +77,12 @@ module.exports = {
   //       }
   //   ]
   // ],
-  env: {
-    baseUrl: process.env.BASE_URL || 'http://localhost:30001'
-  },
+  // env: {
+  //   baseUrl: process.env.BASE_URL || 'http://localhost:30001'
+  // },
   axios: {
     // proxyHeaders: false
-    // baseURL: process.env.BASE_URL || 'http://localhost:30001',
+    baseURL: process.env.BASE_URL || 'http://localhost:30001',
     progress: true,
     retry: { retries: 3 }
   },
