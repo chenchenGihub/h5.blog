@@ -68,15 +68,15 @@ module.exports = {
     '@nuxtjs/axios',
     '@nuxtjs/proxy'
   ],
-  proxy: [
-    [
-      '/api', 
-      { 
-        target: 'http://h5blog.chenes.top/', // api主机
-        pathRewrite: { '^/api' : '/' }
-      }
-  ]
-],
+//   proxy: [
+//     [
+//       '/api', 
+//       { 
+//         target: 'http://h5blog.chenes.top/', // api主机
+//         pathRewrite: { '^/api' : '/' }
+//       }
+//   ]
+// ],
   axios: {
     // proxyHeaders: false
   },
