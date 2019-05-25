@@ -2,7 +2,7 @@
  * @Description: file content
  * @Author: chenchen
  * @Date: 2019-05-02 19:47:28
- * @LastEditTime: 2019-05-25 21:54:20
+ * @LastEditTime: 2019-05-25 21:56:55
  */
 const pkg = require('./package');
 var TransformModulesPlugin = require('webpack-transform-modules-plugin');
@@ -54,7 +54,7 @@ module.exports = {
   */
   plugins: [
     {
-      src:'~/plugins/cube.js',
+      src: '~/plugins/cube.js',
       ssr: true
     },
     '~/plugins/axios',
@@ -68,19 +68,22 @@ module.exports = {
     '@nuxtjs/axios',
     '@nuxtjs/proxy'
   ],
-//   proxy: [
-//     [
-//       '/api', 
-//       { 
-//         target: 'http://h5blog.chenes.top/', // api主机
-//         pathRewrite: { '^/api' : '/' }
-//       }
-//   ]
-// ],
+  //   proxy: [
+  //     [
+  //       '/api', 
+  //       { 
+  //         target: 'http://h5blog.chenes.top/', // api主机
+  //         pathRewrite: { '^/api' : '/' }
+  //       }
+  //   ]
+  // ],
+  env: {
+    baseUrl: process.env.BASE_URL || 'http://localhost:3000'
+  },
   axios: {
     // proxyHeaders: false
-    baseURL: process.env.BASE_URL || 'http://localhost:30001',
-    progress:true,
+    // baseURL: process.env.BASE_URL || 'http://localhost:30001',
+    progress: true,
     retry: { retries: 3 }
   },
 
