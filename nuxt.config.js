@@ -2,7 +2,7 @@
  * @Description: file content
  * @Author: chenchen
  * @Date: 2019-05-02 19:47:28
- * @LastEditTime: 2019-05-25 21:44:03
+ * @LastEditTime: 2019-05-25 21:54:20
  */
 const pkg = require('./package');
 var TransformModulesPlugin = require('webpack-transform-modules-plugin');
@@ -79,7 +79,7 @@ module.exports = {
 // ],
   axios: {
     // proxyHeaders: false
-    baseURL: process.env.BASE_URL || 'http://localhost:3000',
+    baseURL: process.env.BASE_URL || 'http://localhost:30001',
     progress:true,
     retry: { retries: 3 }
   },
