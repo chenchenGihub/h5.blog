@@ -2,7 +2,7 @@
  * @Description: file content
  * @Author: chenchen
  * @Date: 2019-04-16 08:49:09
- * @LastEditTime: 2019-05-11 00:09:56
+ * @LastEditTime: 2019-05-26 18:33:23
  */
 const { decodedToken } = require('../utils/decodeToken');
 const { secretKey } = require('../config');
@@ -28,9 +28,10 @@ exports.auths = async (req, res, next) => {
 
         try {
 
-            token = await decodedToken(req.headers.authorization, secretKey);
+            token = await decodedToken(req.headers.authorization.split(" ")[1], secretKey);
 
            
+            console.log(token);
             
 
         } catch (error) {

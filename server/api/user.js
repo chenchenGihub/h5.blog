@@ -2,7 +2,7 @@
  * @Description: 用户相关的api
  * @Author: chenchen
  * @Date: 2019-04-12 20:07:01
- * @LastEditTime: 2019-05-25 22:48:12
+ * @LastEditTime: 2019-05-26 18:27:59
  */
 const {
   Router
@@ -41,7 +41,7 @@ router.put('/register', async (req, res, next) => {
   }
 
   console.log(req.body);
-  
+
 
   User.userName = req.body.userName;
   // User.email = req.body.email;
@@ -78,7 +78,7 @@ router.put('/login', async (req, res, next) => {
   } = req.body;
 
   // console.log(req);
-  
+
 
 
   /**
@@ -103,7 +103,10 @@ router.put('/login', async (req, res, next) => {
 
   const doc = await UserModel.findOne({
     userName: userName
-  });
+  }, 'avatarUrl,userName,description', { lean: true });
+
+
+
 
   if (doc) {
 
@@ -112,7 +115,7 @@ router.put('/login', async (req, res, next) => {
 
     res.json({
       success: true,
-      data: { ...doc._doc, token: clientToken }
+      data: { ...doc, token: clientToken }
     })
   } else {
     res.json({
@@ -166,21 +169,21 @@ router.get('/checkname', async (req, res, next) => {
 })
 
 router.put('/togglelike', async (req, res, next) => {
-  let { id,authorId } = req.body;
+  let { id, authorId } = req.body;
   let user;
 
   if (!id) {
     return res.json({
-      success:false,
-      data:null,
-      code:errorCode.UNKHOWN,
-      msg:errorCode.UNKHOWN
+      success: false,
+      data: null,
+      code: errorCode.UNKHOWN,
+      msg: errorCode.UNKHOWN
     })
   }
 
   try {
     if (id) {
-      user = await UserModel.findById({_id:authorId})
+      user = await UserModel.findById({ _id: authorId })
 
       if (!user) {
         return res.json({
@@ -191,14 +194,14 @@ router.put('/togglelike', async (req, res, next) => {
         })
       }
 
-    const res =  await UserModel.updateOne({_id:user._id},{
-      fans:user.fans.push()
-    })
+      const res = await UserModel.updateOne({ _id: user._id }, {
+        fans: user.fans.push()
+      })
 
     }
-    
 
-   
+
+
 
   } catch (error) {
 
