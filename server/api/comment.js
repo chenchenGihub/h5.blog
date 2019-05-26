@@ -2,7 +2,7 @@
  * @Description: 评论api
  * @Author: chenchen
  * @Date: 2019-04-24 22:15:40
- * @LastEditTime: 2019-05-13 09:14:41
+ * @LastEditTime: 2019-05-26 16:48:50
  */
 const { Router } = require('express');
 const mongoose = require('mongoose');
@@ -230,7 +230,7 @@ router.put('/toggleclike', async (req, res, next) => {
 
     if (cdoc.voted.id(userId)) {
         cdoc.voted.pull(userId)
-    } else {
+    } else if(userId){
         cdoc.voted.push(userId)
         subCommentdoc = cdoc.voted[0];
         isLike = true

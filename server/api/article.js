@@ -2,7 +2,7 @@
  * @Description: 博客文章api
  * @Author: chenchen
  * @Date: 2019-04-12 20:07:01
- * @LastEditTime: 2019-05-12 10:44:51
+ * @LastEditTime: 2019-05-26 16:48:40
  */
 
 const { Router } = require('express');
@@ -227,7 +227,7 @@ router.put('/togglelike', async (req, res, next) => {
 
     if (votesDoc) {
         articleDoc.votes.id(userId).remove()
-    } else {
+    } else if(userId){
         articleDoc.votes.push(userId)
         votesdoc = articleDoc.votes[0];
     }
