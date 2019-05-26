@@ -2,7 +2,7 @@
  * @Description: file content
  * @Author: chenchen
  * @Date: 2019-05-02 19:47:28
- * @LastEditTime: 2019-05-25 22:47:13
+ * @LastEditTime: 2019-05-26 15:04:46
  */
 const pkg = require('./package');
 var TransformModulesPlugin = require('webpack-transform-modules-plugin');
@@ -22,7 +22,9 @@ module.exports = {
     title: pkg.name,
     meta: [
       { charset: 'utf-8' },
-      { name: 'viewport', content: 'width=device-width, initial-scale=1' },
+      { name: 'viewport', content: 'width=device-width,height=device-height,initial-scale=1,maximum=1,user-scalable=no;' },
+      { name: 'apple-mobile-web-app-capable', content: 'yes' },
+      { httpEquiv: 'content-security-policy', content: 'default-src self;' },
       { hid: 'description', name: 'description', content: pkg.description }
     ],
     link: [
