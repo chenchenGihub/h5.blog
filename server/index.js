@@ -2,7 +2,7 @@
  * @Description: file content
  * @Author: chenchen
  * @Date: 2019-04-10 18:50:38
- * @LastEditTime: 2019-05-26 21:57:47
+ * @LastEditTime: 2019-05-27 22:11:39
  */
 const http = require('http')
 const express = require('express')
@@ -76,16 +76,6 @@ async function start() {
 
 
   app.use('/api', (req, res, next) => {
-
-    //   try {
-    //  let a =   await client.get("testLists");
-    //  console.log(a);
-
-    //   } catch (error) {
-    //     console.log(error);
-
-    //   }
-
 
     next();
 
