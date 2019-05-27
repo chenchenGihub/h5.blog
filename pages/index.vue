@@ -2,17 +2,23 @@
  * @Description: 主页
  * @Author: chenchen
  * @Date: 2019-05-02 19:47:28
- * @LastEditTime: 2019-05-25 20:48:27
+ * @LastEditTime: 2019-05-26 23:48:41
  -->
 <template>
-  <CubePage type="scroll-view" class="mainpage">
+  <CubePage
+    type="scroll-view"
+    class="mainpage"
+  >
     <template slot="header">
       <Header>
         <template>
           <div>主页</div>
         </template>
         <template v-slot:right>
-          <div class="publish" @click="publish">发布</div>
+          <div
+            class="publish"
+            @click="publish"
+          >发布</div>
         </template>
       </Header>
     </template>
@@ -20,7 +26,10 @@
     <template slot="content">
       <main class="contents">
         <div class="content-scroll-wrapper">
-          <div class="content-scroll-list-wrap" ref="scrollWrapper">
+          <div
+            class="content-scroll-list-wrap"
+            ref="scrollWrapper"
+          >
             <cube-scroll
               ref="contentScroll"
               :data="content"
@@ -29,11 +38,19 @@
               @pulling-up="onPullingUp"
             >
               <ul class="imgs-wrapper">
-                <li v-for="(item, index) in content" :key="index" class="imgs-item">
+                <li
+                  v-for="(item, index) in content"
+                  :key="index"
+                  class="imgs-item"
+                >
                   <section class="item-box">
                     <header class="item-header">
                       <div class="avatar-box">
-                        <img :src="item.user.avatar" alt srcset>
+                        <img
+                          :src="item.user.avatar"
+                          alt
+                          srcset
+                        >
                       </div>
                       <div class="username">
                         <section>{{item.user.name}}</section>
@@ -41,14 +58,28 @@
                       </div>
                     </header>
                     <section class="title">{{item.title}}</section>
-                    <section class="content1" @click="goDetail(item)">
+                    <section
+                      class="content1"
+                      @click="goDetail(item)"
+                    >
                       <section
                         v-if="item.imgs.length<=1"
                         class="contentemplisis"
                       >{{item.text.substring(0,100)}}{{item.text.length>100?"...":''}}</section>
-                      <section class="img-w" v-if="item.imgs.length>=1">
-                        <div class="img-b" v-for="(item, index) in item.imgs" :key="index">
-                          <img :src="item" alt srcset>
+                      <section
+                        class="img-w"
+                        v-if="item.imgs.length>=1"
+                      >
+                        <div
+                          class="img-b"
+                          v-for="(item, index) in item.imgs"
+                          :key="index"
+                        >
+                          <img
+                            :src="item"
+                            alt
+                            srcset
+                          >
                         </div>
                       </section>
                     </section>
@@ -65,7 +96,10 @@
                   </section>
                 </li>
               </ul>
-              <template slot="pulldown" slot-scope="props">
+              <template
+                slot="pulldown"
+                slot-scope="props"
+              >
                 <div
                   v-if="props.pullDownRefresh"
                   class="cube-pulldown-wrapper"
@@ -78,12 +112,21 @@
                   >
                     <span :class="{rotate: props.bubbleY > 0}">↓</span>
                   </div>
-                  <div class="after-trigger" v-else>
-                    <div v-show="props.isPullingDown" class="loading">
+                  <div
+                    class="after-trigger"
+                    v-else
+                  >
+                    <div
+                      v-show="props.isPullingDown"
+                      class="loading"
+                    >
                       <cube-loading></cube-loading>
                     </div>
                     <!-- <transition name="success"> -->
-                    <div v-show="!props.isPullingDown" class="text-wrapper">
+                    <div
+                      v-show="!props.isPullingDown"
+                      class="text-wrapper"
+                    >
                       <span class="refresh-text">博客有{{1}}条更新</span>
                     </div>
                     <!-- </transition> -->
@@ -126,27 +169,40 @@ export default {
         },
         pullUpLoad: true
       },
-      secondStop: 26
+      secondStop: 26,
+      pagination: {
+        skip: 0,
+        count: 10
+      }
     };
   },
   methods: {
     async onPullingDown() {
-   
-     await this.$store.dispatch("article/getArticle", {
+      await this.$store.dispatch("article/getArticle", {
         params: { skip: 0, count: 10 }
       });
 
-      let {articelList,total,success} = this.$store.state.article.articelListRes;
+      let {
+        articelList,
+        total,
+        success
+      } = this.$store.state.article.articelListRes;
 
       this.content = [...articelList];
 
       this.$refs.contentScroll.scrollTo(0, this.secondStop, 300);
-      
     },
-    onPullingUp() {
-      setTimeout(() => {
-        this.content = this.content.concat(imgs);
-      }, 1000);
+    async onPullingUp() {
+     
+      
+      if (this.$store.state.article.articelListRes.hasMore) {
+        await this.$store.dispatch("article/getArticle", {
+          params: { skip: this.pagination.skip + 10, count: 10 }
+        });
+         this.content = this.content.slice();
+      }else{
+        this.content = this.content.slice();
+      }
     },
     onImgLoad() {
       const contentScroll = this.$refs.contentScroll;

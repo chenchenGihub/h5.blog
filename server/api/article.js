@@ -2,7 +2,7 @@
  * @Description: 博客文章api
  * @Author: chenchen
  * @Date: 2019-04-12 20:07:01
- * @LastEditTime: 2019-05-26 16:48:40
+ * @LastEditTime: 2019-05-26 23:30:34
  */
 
 const { Router } = require('express');
@@ -11,6 +11,7 @@ const { auths } = require('../middleware/auth')
 const Article = require('../db/model/article');
 const User = require('../db/model/user');
 const Comment = require('../db/model/comment');
+const Cache = require('../utils/cache')
 
 const log4js = require('log4js');
 // const log4js = require('../log/log');
@@ -24,6 +25,9 @@ const {
 // router.all("/article", auths)
 
 router.get('/article', async (req, res, next) => {
+
+
+
 
     log4js.configure({
         appenders: { cheese: { type: 'file', filename: 'cheese.log' } },
@@ -41,10 +45,22 @@ router.get('/article', async (req, res, next) => {
 
     let { skip, count } = req.query;
 
-    let articles, total;
+    let articles, total,hasMore=true;
 
     try {
-        articles = await Article.find({}, null, { skip: +skip, limit: +count });
+        if (+skip === 0) {
+            Cache.set("refresh_time", Date.now())
+            articles = await Article.find({}, null, { skip: +skip, limit: +count });
+        } else {
+            let rt = await Cache.get("refresh_time");
+
+            articles = await Article.find({
+                createdAt: {
+                    $lte: +rt
+                }
+            }, null, { skip: +skip, limit: +count });
+        }
+
         total = await Article.countDocuments();
 
     } catch (error) {
@@ -52,12 +68,14 @@ router.get('/article', async (req, res, next) => {
 
     }
 
-    // console.log(articles);
-
+    console.log(articles);
+    if (articles.length===0) {
+        hasMore = false
+    }
 
     res.json({
         success: true,
-        data: { articles, total },
+        data: { articles, total,hasMore },
         errorCode: null,
         errorMsg: null,
     })
@@ -141,29 +159,29 @@ router.post("/publishArticle", async (req, res, next) => {
 })
 
 
-router.get('/getSingleArticle',async (req, res, next) => {
-    const { id,userId } = req.query;
+router.get('/getSingleArticle', async (req, res, next) => {
+    const { id, userId } = req.query;
 
-   
-    
-    let article, user,isLike=false,comment_counts,comment_doc,children_comment_count=0;
+
+
+    let article, user, isLike = false, comment_counts, comment_doc, children_comment_count = 0;
     try {
 
         article = await Article.findById(id, "title text html user votes");
 
         let votesDoc = await article.votes.id(userId);
-      
-        comment_doc = await Comment.find({articleId:id});
+
+        comment_doc = await Comment.find({ articleId: id });
 
         for (let comment of comment_doc) {
-           
-           children_comment_count += comment.children_comment.length
-            
+
+            children_comment_count += comment.children_comment.length
+
         }
 
-        comment_counts = comment_doc.length+children_comment_count;
+        comment_counts = comment_doc.length + children_comment_count;
 
-    
+
         if (votesDoc) {
             isLike = true
         }
@@ -206,7 +224,7 @@ router.get('/getSingleArticle',async (req, res, next) => {
             text: article.text,
             html: article.html,
             author: user,
-            voteCounts:article.votes.length,
+            voteCounts: article.votes.length,
             isLike,
             comment_counts
         },
@@ -223,11 +241,11 @@ router.put('/togglelike', async (req, res, next) => {
 
     let votesDoc = await articleDoc.votes.id(userId);
 
-   
+
 
     if (votesDoc) {
         articleDoc.votes.id(userId).remove()
-    } else if(userId){
+    } else if (userId) {
         articleDoc.votes.push(userId)
         votesdoc = articleDoc.votes[0];
     }
@@ -236,8 +254,8 @@ router.put('/togglelike', async (req, res, next) => {
 
 
     res.json({
-        success:true,
-        data: {isLike:!votesDoc}
+        success: true,
+        data: { isLike: !votesDoc }
     })
 })
 

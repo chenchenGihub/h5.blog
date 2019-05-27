@@ -2,12 +2,13 @@
  * @Description: file content
  * @Author: chenchen
  * @Date: 2019-04-10 18:50:38
- * @LastEditTime: 2019-05-09 09:40:20
+ * @LastEditTime: 2019-05-26 21:57:47
  */
 const http = require('http')
 const express = require('express')
 const consola = require('consola')
 const mongoose = require('mongoose')
+
 const {
   Nuxt,
   Builder
@@ -19,7 +20,7 @@ const proxy = require('http-proxy-middleware');
 let config = require('../nuxt.config.js')
 config.dev = !(process.env.NODE_ENV === 'production')
 
-const { DBURL } = require('./config')
+const { DBURL, REDIS_HOST, REDIS_PORT } = require('./config')
 
 const api = require('./api')
 
@@ -28,13 +29,21 @@ const { filter } = require('./middleware/filter')
 const log4js = require('./log/log');
 
 
+
 async function start() {
 
-  mongoose.connect(DBURL)
 
-  const con = mongoose.connection
+  
 
-  con.on("error", console.error.bind(console, "数据库连接失败"))
+  /**
+   * 创建一个mongodb连接
+   */
+  mongoose.connect(DBURL, { useNewUrlParser: true });
+
+  const con = mongoose.connection;
+
+  //mongodb连接数据库发生错误
+  con.on("error", console.error.bind(console, "mongodb数据库连接失败"));
 
   con.once("open", () => {
     consola.ready({
@@ -63,16 +72,24 @@ async function start() {
   app.use(bodyParser.json())
 
   // app.use('/api', proxy({target: 'http://localhost:3000', changeOrigin: true}));
-  
-  
 
-  app.use('/api', (req,res,next)=>{
 
+
+  app.use('/api', (req, res, next) => {
+
+    //   try {
+    //  let a =   await client.get("testLists");
+    //  console.log(a);
+
+    //   } catch (error) {
+    //     console.log(error);
+
+    //   }
 
 
     next();
-    
-  },api)
+
+  }, api)
 
   // Give nuxt middleware to express
   app.use(nuxt.render);

@@ -2,7 +2,7 @@
  * @Description: 文章的状态管理
  * @Author: chenchen
  * @Date: 2019-03-28 19:55:16
- * @LastEditTime: 2019-05-11 11:35:50
+ * @LastEditTime: 2019-05-26 23:33:18
  */
 import Cookie from 'js-cookie';
 
@@ -10,6 +10,7 @@ export const state = () => ({
   articelListRes: {
     articelList:[],
     total:0,
+    hasMore:true,
     success:false
   },
   publishArticleRes:{
@@ -30,10 +31,14 @@ export const state = () => ({
 
 export const mutations = {
   getArticle(state, pl) {
+
+    // console.log(pl);
+    
   
     state.articelListRes.articelList = [...pl.data.articles];
     state.articelListRes.total = pl.data.total;
     state.articelListRes.success = pl.success;
+    state.articelListRes.hasMore = pl.data.hasMore;
   },
   publishArticle(state,payload){
     state.publishArticleRes.success = payload.success
