@@ -2,7 +2,7 @@
  * @Description: 文章的状态管理
  * @Author: chenchen
  * @Date: 2019-03-28 19:55:16
- * @LastEditTime: 2019-05-26 23:33:18
+ * @LastEditTime: 2019-05-29 20:00:32
  */
 import Cookie from 'js-cookie';
 
@@ -32,7 +32,7 @@ export const state = () => ({
 export const mutations = {
   getArticle(state, pl) {
 
-    // console.log(pl);
+ 
     
   
     state.articelListRes.articelList = [...pl.data.articles];

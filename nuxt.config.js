@@ -2,7 +2,7 @@
  * @Description: file content
  * @Author: chenchen
  * @Date: 2019-05-02 19:47:28
- * @LastEditTime: 2019-05-26 15:04:46
+ * @LastEditTime: 2019-05-29 22:32:28
  */
 const pkg = require('./package');
 var TransformModulesPlugin = require('webpack-transform-modules-plugin');
@@ -61,6 +61,7 @@ module.exports = {
     },
     '~/plugins/axios',
     { src: '~plugins/nuxt-quill-plugin.js', ssr: true },
+    { src: '~/plugins/socket.js', ssr: true }
   ],
 
   /*
@@ -84,7 +85,7 @@ module.exports = {
   // },
   axios: {
     // proxyHeaders: false
-    baseURL: (process.env.NODE_ENV) === 'production'? 'http://h5blog.chenes.top/' : 'http://localhost:3000',
+    baseURL: (process.env.NODE_ENV) === 'production' ? 'http://h5blog.chenes.top/' : 'http://localhost:3000',
     progress: true,
     retry: { retries: 3 }
   },

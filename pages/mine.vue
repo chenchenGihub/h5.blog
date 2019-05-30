@@ -2,7 +2,7 @@
  * @Description: 主页
  * @Author: chenchen
  * @Date: 2019-05-02 19:47:28
- * @LastEditTime: 2019-05-07 10:50:40
+ * @LastEditTime: 2019-05-29 19:56:34
  -->
 <template>
   <section class="container">
@@ -28,7 +28,7 @@ export default {
     // 请检查您是否在服务器端
     // 使用 req 和 res
   
-    // console.log(context);
+  
     
     if (process.server) {
       // return { host: req.headers.host };

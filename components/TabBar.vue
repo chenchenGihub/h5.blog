@@ -2,7 +2,7 @@
  * @Description: file content
  * @Author: chenchen
  * @Date: 2019-05-03 20:26:12
- * @LastEditTime: 2019-05-07 10:13:59
+ * @LastEditTime: 2019-05-29 23:42:51
  -->
 <template>
   <div class="tabbar">
@@ -40,7 +40,7 @@ export default {
           icon: "cubeic-home"
         },
         {
-          label: "消息",
+          label: "关注",
           icon: "cubeic-vip"
         },
         {
@@ -68,7 +68,7 @@ export default {
       }
     },
     changeHandler(label) {
-      console.log(label);
+     
     }
   },
  async asyncData(context) {

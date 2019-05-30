@@ -2,7 +2,7 @@
  * @Description: 主页
  * @Author: chenchen
  * @Date: 2019-05-02 19:47:28
- * @LastEditTime: 2019-05-26 23:48:41
+ * @LastEditTime: 2019-05-29 22:37:56
  -->
 <template>
   <CubePage
@@ -150,6 +150,7 @@ import CubePage from "~/components/CubePage.vue";
 import Header from "~/components/Header.vue";
 import TabBar from "~/components/TabBar.vue";
 import Cookie from "js-cookie";
+
 export default {
   components: {
     Header,
@@ -193,14 +194,12 @@ export default {
       this.$refs.contentScroll.scrollTo(0, this.secondStop, 300);
     },
     async onPullingUp() {
-     
-      
       if (this.$store.state.article.articelListRes.hasMore) {
         await this.$store.dispatch("article/getArticle", {
           params: { skip: this.pagination.skip + 10, count: 10 }
         });
-         this.content = this.content.slice();
-      }else{
+        this.content = this.content.slice();
+      } else {
         this.content = this.content.slice();
       }
     },
@@ -222,6 +221,10 @@ export default {
       });
     }
   },
+  mounted() {
+    this.$socket.emit('data',111)
+   
+  },
   async asyncData(context) {
     // 请检查您是否在服务器端
     // 使用 req 和 res
@@ -229,8 +232,6 @@ export default {
     const data = await context.store.$axios.$get("/api/article", {
       params: { skip: 0, count: 10 }
     });
-
-    // console.log(data.data.articles);
 
     if (process.server) {
       // return { host: req.headers.host };

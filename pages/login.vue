@@ -2,7 +2,7 @@
  * @Description: file content
  * @Author: chenchen
  * @Date: 2019-05-07 09:56:31
- * @LastEditTime: 2019-05-27 21:25:17
+ * @LastEditTime: 2019-05-29 19:58:41
  -->
 <template>
   <CubePage type="scroll-view" class="mainpage">
@@ -125,7 +125,7 @@ export default {
       }
     },
     check(e) {
-      console.log(222);
+     
     },
     changeHandler(e) {
       let pwd = document.querySelector("#pwd").value.trim();

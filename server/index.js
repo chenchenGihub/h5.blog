@@ -2,7 +2,7 @@
  * @Description: file content
  * @Author: chenchen
  * @Date: 2019-04-10 18:50:38
- * @LastEditTime: 2019-05-27 22:11:39
+ * @LastEditTime: 2019-05-29 23:04:51
  */
 const http = require('http')
 const express = require('express')
@@ -22,7 +22,9 @@ config.dev = !(process.env.NODE_ENV === 'production')
 
 const { DBURL, REDIS_HOST, REDIS_PORT } = require('./config')
 
-const api = require('./api')
+const api = require('./api');
+
+const chat_server = require('./chat_server')
 
 const { filter } = require('./middleware/filter')
 
@@ -32,8 +34,28 @@ const log4js = require('./log/log');
 
 async function start() {
 
-
+  let redis = require('redis');
+  global.client = null;
+  /**
+     * 创建一个redis连接
+     */
+    try {
+      client = redis.createClient(6379, 'localhost');
+    } catch (error) {
+      console.log("redis连接错误", error);
+    }
   
+  
+    // 鉴权处理(如果redis设置密码的话)
+    client.auth('');
+  
+  
+    //redis连接数据库发生错误
+    client.on("error", (error) => {
+      console.error.bind(console, error, "redis数据库连接失败")
+    })
+  
+
 
   /**
    * 创建一个mongodb连接
@@ -85,8 +107,21 @@ async function start() {
   app.use(nuxt.render);
 
   const server = http.createServer(app)
-  const io = require('socket.io').listen(server)
 
+  chat_server.listen(server);
+  // global.io = require('socket.io').listen(server);
+
+  // io.on("connection",(socket)=>{
+  //   console.log('connect',socket.id);
+  //   socket.on("data",(data)=>{
+     
+  //   })
+
+  //   socket.on('disconnect', function(){
+  //     console.log('user disconnected');
+  //   });
+
+  // })
 
   // Listen the server
   server.listen(port, host)

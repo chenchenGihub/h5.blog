@@ -2,7 +2,7 @@
  * @Description: 状态管理
  * @Author: chenchen
  * @Date: 2019-03-28 19:55:16
- * @LastEditTime: 2019-05-08 10:45:57
+ * @LastEditTime: 2019-05-29 20:01:02
  */
 import Cookie from 'js-cookie';
 const defaultUserinfo = {
@@ -57,7 +57,7 @@ export const mutations = {
     state.userInfo = { ...defaultUserinfo }
   },
   user(state, payload){
-    console.log(payload);
+   
     
   }
 }
@@ -100,18 +100,12 @@ export const actions = {
     commit, state
   }, payload) {
    
-console.log(this);
+
 
     // const data = await this.$axios.$put('/api/logout', { id: state.userInfo._id });
 
     commit("logout", data)
 
   },
-    // nuxtServerInit ({ commit }, ctx) {
-     
-    //   console.log(ctx);
-      
-    //     commit('user', ctx)
-     
-    // }
+    
 }

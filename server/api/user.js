@@ -2,7 +2,7 @@
  * @Description: 用户相关的api
  * @Author: chenchen
  * @Date: 2019-04-12 20:07:01
- * @LastEditTime: 2019-05-26 18:27:59
+ * @LastEditTime: 2019-05-29 20:00:04
  */
 const {
   Router
@@ -40,7 +40,7 @@ router.put('/register', async (req, res, next) => {
     })
   }
 
-  console.log(req.body);
+ 
 
 
   User.userName = req.body.userName;
@@ -77,7 +77,7 @@ router.put('/login', async (req, res, next) => {
     password
   } = req.body;
 
-  // console.log(req);
+  
 
 
 
@@ -200,13 +200,7 @@ router.put('/togglelike', async (req, res, next) => {
 
     }
 
-
-
-
   } catch (error) {
-
-    console.log(error);
-
 
     res.json({
       success: false,
@@ -216,7 +210,6 @@ router.put('/togglelike', async (req, res, next) => {
     })
 
   }
-
 
   res.json({
     success: true,

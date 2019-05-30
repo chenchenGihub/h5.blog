@@ -2,7 +2,7 @@
  * @Description: 评论api
  * @Author: chenchen
  * @Date: 2019-04-24 22:15:40
- * @LastEditTime: 2019-05-26 16:48:50
+ * @LastEditTime: 2019-05-29 20:02:28
  */
 const { Router } = require('express');
 const mongoose = require('mongoose');
@@ -24,6 +24,14 @@ router.post('/comment', async (req, res, next) => {
 
 
     let { textValue, articleId, userId } = req.body;
+
+    console.log(io);
+    
+
+    io.on('connection', function (socket) {
+        console.log('someone connected');
+        setInterval(function () { socket.emit('date', { 'date': new Date() }, 1000); })
+    })
 
 
     let data, user, author;
@@ -47,8 +55,6 @@ router.post('/comment', async (req, res, next) => {
         data = await comment.save();
 
     } catch (error) {
-
-        console.log(error);
 
         res.json({
             success: false,
@@ -78,7 +84,7 @@ router.get('/commentlist', async (req, res, next) => {
         docs = await Comment.find({ articleId: articleId });
 
         for (let doc of docs) {
-            
+
             user = doc.voted.id(userId);
 
             if (user) {
@@ -88,7 +94,7 @@ router.get('/commentlist', async (req, res, next) => {
             doc.votedCounts = doc.voted.length;
 
             for (let cdoc of doc.children_comment) {
-                
+
                 user = cdoc.voted.id(userId);
 
                 if (user) {
@@ -190,7 +196,7 @@ router.put('/reply', async (req, res, next) => {
 
 
     } catch (error) {
-        console.log(error);
+       
 
         res.json({
             success: false,
@@ -230,7 +236,7 @@ router.put('/toggleclike', async (req, res, next) => {
 
     if (cdoc.voted.id(userId)) {
         cdoc.voted.pull(userId)
-    } else if(userId){
+    } else if (userId) {
         cdoc.voted.push(userId)
         subCommentdoc = cdoc.voted[0];
         isLike = true
@@ -260,7 +266,7 @@ router.put('/togglecchildlike', async (req, res, next) => {
 
     cdoc = await Comment.findById({ _id: commentId });
 
-    
+
 
     if (cdoc.children_comment.id(child_c_id).voted.id(userId)) {
         cdoc.children_comment.id(child_c_id).voted.id(userId).remove();

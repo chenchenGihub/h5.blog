@@ -2,7 +2,7 @@
  * @Description: 主页
  * @Author: chenchen
  * @Date: 2019-05-02 19:47:28
- * @LastEditTime: 2019-05-07 10:13:18
+ * @LastEditTime: 2019-05-30 00:03:42
  -->
 <template>
   <CubePage>
@@ -15,7 +15,7 @@
               <section
                 class="h1 chat"
                 :style="[{color:index===0?'#000':'#fff'}]"
-              >聊天</section>
+              >关注</section>
               <section
                 class="h1 notation"
                 :style="[{color:index===0?'#fff':'#000'}]"
@@ -39,7 +39,9 @@
           >
             <cube-slide-item>
               <div class="chat-b">
-                2222
+               <SubscribePage>
+                 
+               </SubscribePage>
               </div>
             </cube-slide-item>
             <cube-slide-item>
@@ -61,10 +63,11 @@
 
 <script>
 import Header from "~/components/Header.vue";
-import CubePage from "~/components/CubePage.vue";
+import SubscribePage from "~/components/SubscribePage.vue";
 import TabBar from "~/components/TabBar.vue";
+
 export default {
-  components: { Header, CubePage, TabBar },
+  components: { Header, SubscribePage, TabBar },
   data() {
     return {
       index: 0,
@@ -87,7 +90,7 @@ export default {
        * 和视口宽度算出其相对比例
        */
       let percent = -x / document.body.clientWidth;
-      // console.log(this.topTabWidth,this.lineWidth );
+     
 
       /**
        * 必须减去自身的宽度
@@ -107,6 +110,15 @@ export default {
       this.index = x;
     },
     change(index) {}
+  },
+  created() {
+
+  
+   
+   this.$socket.on("msg", function(data) {
+      console.log(data);
+      // socket.emit("giveToYou", { my: "data" });
+    });
   },
   mounted() {
     let style = window.getComputedStyle(
@@ -130,7 +142,7 @@ export default {
     // 请检查您是否在服务器端
     // 使用 req 和 res
 
-    // console.log(context);
+   
 
     if (process.server) {
       // return { host: req.headers.host };

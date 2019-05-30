@@ -2,7 +2,7 @@
  * @Description: file content
  * @Author: chenchen
  * @Date: 2019-05-07 09:56:31
- * @LastEditTime: 2019-05-16 22:14:51
+ * @LastEditTime: 2019-05-29 21:41:57
  -->
 <template>
   <CubePage
@@ -426,18 +426,19 @@ export default {
       }
     }
   },
-  mounted(){
-    let viewPortHeight = Math.max(document.documentElement.clientHeight,document.body.clientHeight);
+  mounted() {
+    let viewPortHeight = Math.max(
+      document.documentElement.clientHeight,
+      document.body.clientHeight
+    );
 
-      let { bottom, top } = document.querySelector('.seperater').getBoundingClientRect();
+    let { bottom, top } = document
+      .querySelector(".seperater")
+      .getBoundingClientRect();
 
-     
-
-      if (bottom>0&&top<viewPortHeight) {
-        this.loadComments();
-      }
-
-   
+    if (bottom > 0 && top < viewPortHeight) {
+      this.loadComments();
+    }
   },
   async asyncData(context) {
     // 请检查您是否在服务器端

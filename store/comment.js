@@ -2,7 +2,7 @@
  * @Description: 文章的状态管理
  * @Author: chenchen
  * @Date: 2019-03-28 19:55:16
- * @LastEditTime: 2019-05-13 09:25:23
+ * @LastEditTime: 2019-05-29 20:01:39
  */
 import Cookies from 'js-cookie'
 
@@ -33,7 +33,7 @@ export const mutations = {
     state.commentListRes.success = true;
   },
   reply(state, pl) {
-    console.log(pl);
+  
 
   },
   togglelike(state, pl) {
@@ -56,19 +56,11 @@ export const mutations = {
   },
   reloadCTogglelike(state, pl) {
 
-   
-   
-   
-    
-
     state.commentListRes.commentList.forEach(element => {
 
       if (element.children_comment.length > 0) {
 
         element.children_comment.find(v => v._id === pl.commentId).isLike = pl.isLike;
-
-       
-        
 
         if (pl.isLike) {
           (element.children_comment.find(v => v._id === pl.commentId)).votedCounts++
@@ -78,8 +70,6 @@ export const mutations = {
       }
       
     });
-
-
 
   }
 }
@@ -109,7 +99,7 @@ export const actions = {
     let data;
 
     let user = JSON.parse(sessionStorage.getItem("user"));
-    console.log(user);
+   
 
     params.userId = user.id;
 
