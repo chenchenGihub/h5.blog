@@ -2,7 +2,7 @@
  * @Description: file content
  * @Author: chenchen
  * @Date: 2019-05-07 09:56:31
- * @LastEditTime: 2019-05-29 19:58:41
+ * @LastEditTime: 2019-06-01 19:38:14
  -->
 <template>
   <CubePage type="scroll-view" class="mainpage">
@@ -114,6 +114,9 @@ export default {
           "user",
           JSON.stringify(this.$store.state.user.userInfo)
         );
+
+      
+        
 
         this.$router.go(-1);
       } else {

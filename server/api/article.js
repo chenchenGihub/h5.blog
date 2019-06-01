@@ -2,7 +2,7 @@
  * @Description: 博客文章api
  * @Author: chenchen
  * @Date: 2019-04-12 20:07:01
- * @LastEditTime: 2019-05-29 20:43:04
+ * @LastEditTime: 2019-06-01 19:11:10
  */
 
 const { Router } = require('express');
@@ -164,10 +164,7 @@ router.get('/getSingleArticle', async (req, res, next) => {
     const { id, userId } = req.query;
 
 
-    io.on('connection', function (socket) {
-        console.log('someone connected');
-       
-    })
+   
 
 
 

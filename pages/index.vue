@@ -2,7 +2,7 @@
  * @Description: 主页
  * @Author: chenchen
  * @Date: 2019-05-02 19:47:28
- * @LastEditTime: 2019-05-29 22:37:56
+ * @LastEditTime: 2019-06-01 19:41:33
  -->
 <template>
   <CubePage
@@ -222,8 +222,7 @@ export default {
     }
   },
   mounted() {
-    this.$socket.emit('data',111)
-   
+    
   },
   async asyncData(context) {
     // 请检查您是否在服务器端

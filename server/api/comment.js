@@ -2,7 +2,7 @@
  * @Description: 评论api
  * @Author: chenchen
  * @Date: 2019-04-24 22:15:40
- * @LastEditTime: 2019-05-29 20:02:28
+ * @LastEditTime: 2019-06-01 19:11:14
  */
 const { Router } = require('express');
 const mongoose = require('mongoose');
@@ -27,11 +27,6 @@ router.post('/comment', async (req, res, next) => {
 
     console.log(io);
     
-
-    io.on('connection', function (socket) {
-        console.log('someone connected');
-        setInterval(function () { socket.emit('date', { 'date': new Date() }, 1000); })
-    })
 
 
     let data, user, author;

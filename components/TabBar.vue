@@ -2,7 +2,7 @@
  * @Description: file content
  * @Author: chenchen
  * @Date: 2019-05-03 20:26:12
- * @LastEditTime: 2019-05-29 23:42:51
+ * @LastEditTime: 2019-05-30 20:56:59
  -->
 <template>
   <div class="tabbar">
@@ -57,7 +57,7 @@ export default {
         case "主页":
           this.$router.push("/");
           break;
-        case "消息":
+        case "关注":
           this.$router.push("./msg");
           break;
         case "我的":

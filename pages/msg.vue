@@ -2,7 +2,7 @@
  * @Description: 主页
  * @Author: chenchen
  * @Date: 2019-05-02 19:47:28
- * @LastEditTime: 2019-05-30 00:03:42
+ * @LastEditTime: 2019-06-01 19:41:48
  -->
 <template>
   <CubePage>
@@ -39,9 +39,9 @@
           >
             <cube-slide-item>
               <div class="chat-b">
-               <SubscribePage>
-                 
-               </SubscribePage>
+                <SubscribePage>
+                  
+                </SubscribePage>
               </div>
             </cube-slide-item>
             <cube-slide-item>
@@ -64,10 +64,11 @@
 <script>
 import Header from "~/components/Header.vue";
 import SubscribePage from "~/components/SubscribePage.vue";
+import CubePage from "~/components/CubePage.vue";
 import TabBar from "~/components/TabBar.vue";
 
 export default {
-  components: { Header, SubscribePage, TabBar },
+  components: { Header, CubePage, SubscribePage, TabBar },
   data() {
     return {
       index: 0,
@@ -90,7 +91,6 @@ export default {
        * 和视口宽度算出其相对比例
        */
       let percent = -x / document.body.clientWidth;
-     
 
       /**
        * 必须减去自身的宽度
@@ -112,15 +112,15 @@ export default {
     change(index) {}
   },
   created() {
-
-  
-   
-   this.$socket.on("msg", function(data) {
+    this.$socket.on("hi", function(data) {
       console.log(data);
       // socket.emit("giveToYou", { my: "data" });
     });
   },
   mounted() {
+
+    console.log(this.$socket.id);
+
     let style = window.getComputedStyle(
       document.querySelector(".header-b"),
       null
@@ -141,8 +141,6 @@ export default {
   async asyncData(context) {
     // 请检查您是否在服务器端
     // 使用 req 和 res
-
-   
 
     if (process.server) {
       // return { host: req.headers.host };

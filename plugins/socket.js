@@ -2,7 +2,7 @@
  * @Description: file content
  * @Author: chenchen
  * @Date: 2019-05-29 21:13:20
- * @LastEditTime: 2019-05-29 22:35:41
+ * @LastEditTime: 2019-06-01 19:37:50
  */
 import Vue from 'vue';
 import io from 'socket.io-client'
