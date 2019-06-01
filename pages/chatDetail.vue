@@ -2,7 +2,7 @@
  * @Description: 主页
  * @Author: chenchen
  * @Date: 2019-05-02 19:47:28
- * @LastEditTime: 2019-06-02 01:02:42
+ * @LastEditTime: 2019-06-02 01:48:50
  -->
 <template>
   <CubePage>
@@ -25,31 +25,8 @@
           </template>
         </Header>
         <section class="container">
-          <cube-slide
-            ref="slide"
-            :data="items"
-            :initial-index="0"
-            :options="options"
-            :loop="false"
-            :auto-play="false"
-            :showDots='false'
-            @scroll="scrolling($event)"
-            @scroll-end="scrollend"
-            @change="change"
-          >
-            <cube-slide-item>
-              <div class="chat-b">
-                <SubscribePage>
-                  
-                </SubscribePage>
-              </div>
-            </cube-slide-item>
-            <cube-slide-item>
-              <div class="notation-b">
-                <Notation></Notation>
-              </div>
-            </cube-slide-item>
-          </cube-slide>
+         
+  
         </section>
       </div>
     </template>
@@ -120,24 +97,7 @@ export default {
   },
   mounted() {
 
-    console.log(this.$socket.id);
-
-    let style = window.getComputedStyle(
-      document.querySelector(".header-b"),
-      null
-    );
-
-    this.topTabWidth = +style.getPropertyValue("width").replace("px", "");
-
-    this.lineWidth = +window
-      .getComputedStyle(document.querySelector(".line"), null)
-      .getPropertyValue("width")
-      .replace("px", "");
-
-    this.fontSize = +window
-      .getComputedStyle(document.querySelector(".h1"), null)
-      .getPropertyValue("font-size")
-      .replace("px", "");
+   
   },
   async asyncData(context) {
     // 请检查您是否在服务器端
