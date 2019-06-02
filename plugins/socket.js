@@ -11,6 +11,7 @@ const socket=io('http://h5blog.chenes.top/');
 
 let main = {
     install(Vue) {
+        
         Vue.prototype.$socket = socket// 变量的内容 后期可以在vue中 this->$api.xxx 使用
     }
 }
