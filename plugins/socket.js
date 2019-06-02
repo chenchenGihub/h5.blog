@@ -7,11 +7,11 @@
 import Vue from 'vue';
 import io from 'socket.io-client'
 
-const socket=io('http://h5blog.chenes.top/'); 
+const socket = io('http://h5blog.chenes.top', { path: '/sokect.io' });
 
 let main = {
     install(Vue) {
-        
+
         Vue.prototype.$socket = socket// 变量的内容 后期可以在vue中 this->$api.xxx 使用
     }
 }
