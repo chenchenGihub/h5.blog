@@ -7,7 +7,7 @@
 import Vue from 'vue';
 import io from 'socket.io-client'
 
-const socket=io(); 
+const socket=io('http://h5blog.chenes.top'); 
 
 let main = {
     install(Vue) {
