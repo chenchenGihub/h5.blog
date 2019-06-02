@@ -7,7 +7,7 @@
 import Vue from 'vue';
 import io from 'socket.io-client'
 
-const socket=io('ws://localhost:3000'); 
+const socket=io(); 
 
 let main = {
     install(Vue) {
