@@ -108,20 +108,20 @@ async function start() {
 
   const server = http.createServer(app)
 
-  // chat_server.listen(server);
-  global.io = require('socket.io').listen(server);
+  chat_server.listen(server);
+  // global.io = require('socket.io').listen(server);
 
-  io.on("connection",(socket)=>{
-    console.log('connect',socket.id);
-    socket.on("data",(data)=>{
+  // io.on("connection",(socket)=>{
+  //   console.log('connect',socket.id);
+  //   socket.on("data",(data)=>{
      
-    })
+  //   })
 
-    socket.on('disconnect', function(){
-      console.log('user disconnected');
-    });
+  //   socket.on('disconnect', function(){
+  //     console.log('user disconnected');
+  //   });
 
-  })
+  // })
 
   // Listen the server
   server.listen(port, host)
