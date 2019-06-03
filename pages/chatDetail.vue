@@ -2,7 +2,7 @@
  * @Description: 主页
  * @Author: chenchen
  * @Date: 2019-05-02 19:47:28
- * @LastEditTime: 2019-06-02 01:48:50
+ * @LastEditTime: 2019-06-02 22:12:15
  -->
 <template>
   <CubePage>
@@ -12,27 +12,37 @@
         <Header>
           <template>
             <div class="header-b">
-              <section
-                class="h1 chat"
-                :style="[{color:index===0?'#000':'#fff'}]"
-              >关注</section>
-              <section
-                class="h1 notation"
-                :style="[{color:index===0?'#fff':'#000'}]"
-              >通知</section>
-              <div class="line"></div>
+              <section class="h1 chat">Alex</section>
             </div>
           </template>
         </Header>
-        <section class="container">
-         
-  
+        <section class="content-scroll-wrapper">
+          <div class="content-scroll-list-wrap">
+            <cube-scroll
+              ref="scroll"
+              :data="content"
+              :options="options"
+              @pulling-down="onPullingDown"
+              @pulling-up="onPullingUp"
+            >
+              <ul class="chat-wrapper">
+                <li
+                  v-for="(item, index) in content"
+                  :key="index"
+                  class="chat-item-box"
+                >
+                  {{item.from.nickName}}
+                </li>
+              </ul>
+            </cube-scroll>
+          </div>
+
         </section>
       </div>
     </template>
 
     <template slot="footer">
-      <TabBar></TabBar>
+      <SendWord @sendMsg="sendMsg"></SendWord>
     </template>
 
   </CubePage>
@@ -43,62 +53,71 @@ import Header from "~/components/Header.vue";
 import SubscribePage from "~/components/SubscribePage.vue";
 import Notation from "~/components/Notation.vue";
 import CubePage from "~/components/CubePage.vue";
-import TabBar from "~/components/TabBar.vue";
+import SendWord from "~/components/SendWord.vue";
+import Cookie from "js-cookie";
 
 export default {
-  components: { Header, CubePage, SubscribePage, TabBar,Notation },
+  components: { Header, CubePage, SubscribePage, SendWord, Notation },
   data() {
     return {
-      index: 0,
-      topTabWidth: "",
+      content: [
+        {
+          from: {
+            userId: "dasdhjkashdak",
+            nickName: "alex",
+            word: "你好"
+          },
+          to: {
+            userId: "dasdhjkashdak",
+            nickName: "moly",
+            word: "很高兴认识你"
+          },
+          time: new Date().toLocaleDateString()
+        },
+        {
+          from: {
+            userId: "dasdhjkashdak",
+            nickName: "alex",
+            word: "你好"
+          },
+          to: {
+            userId: "dasdhjkashdak",
+            nickName: "moly",
+            word: "很高兴认识你"
+          },
+          time: new Date().toLocaleDateString()
+        }
+      ],
       options: {
-        listenScroll: true,
-        probeType: 3
-      },
-      items: []
+        pullDownRefresh: {
+          threshold: 10,
+          // stop: 44,
+          stopTime: 1000,
+          txt: ""
+        },
+        pullUpLoad: true
+      }
     };
   },
 
   methods: {
-    submit() {
+    onPullingUp() {
       this.$store.dispatch("user/logout", 123);
     },
-    scrolling({ x, y }) {
-      /**
-       * 通过x:偏移量
-       * 和视口宽度算出其相对比例
-       */
-      let percent = -x / document.body.clientWidth;
-
-      /**
-       * 必须减去自身的宽度
-       */
-      document.querySelector(".line").style.left =
-        percent * (this.topTabWidth - this.lineWidth) + "px";
-      document.querySelectorAll(".h1")[0].style.color = `rgba(${255 *
-        percent},${255 * percent},${255 * percent},1)`;
-      document.querySelectorAll(".h1")[0].style.fontSize =
-        this.fontSize + (20 - this.fontSize) * (1 - percent) + "px";
-      document.querySelectorAll(".h1")[1].style.fontSize =
-        this.fontSize + (20 - this.fontSize) * percent + "px";
-      document.querySelectorAll(".h1")[1].style.color = `rgba(${255 *
-        (1 - percent)},${255 * (1 - percent)},${255 * (1 - percent)},1)`;
+    onPullingDown() {
+      console.log(222);
     },
-    scrollend(x) {
-      this.index = x;
-    },
-    change(index) {}
+    sendMsg(word) {
+      let data = {
+        from: Cookie.get("id"),
+        to: "5cb085f3abbf3dfc8d65ee47",
+        msg: word
+      };
+      this.$socket.emit("sendWord", data);
+    }
   },
-  created() {
-    this.$socket.on("hi", function(data) {
-      console.log(data);
-      // socket.emit("giveToYou", { my: "data" });
-    });
-  },
-  mounted() {
-
-   
-  },
+  created() {},
+  mounted() {},
   async asyncData(context) {
     // 请检查您是否在服务器端
     // 使用 req 和 res
@@ -115,62 +134,18 @@ export default {
 <style scoped lang="scss">
 .wrapper {
   height: 100%;
-  .header-b {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+  .content-scroll-wrapper {
     height: 100%;
-    width: 24%;
-    position: absolute;
-    .line {
-      width: 40px;
-      height: 2px;
-      background: #35495e;
+    position: relative;
+    .content-scroll-list-wrap {
+      height: 100%;
+      width: 100%;
+      transform: rotate(0deg); // fix 子元素超出边框圆角部分不隐藏的问题
       position: absolute;
-      left: 0;
-      bottom: 9px;
+      top: 0;
+      bottom: 0;
+      overflow: hidden;
     }
   }
-  .container {
-    margin: 0 auto;
-    height: 100%;
-    width: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-    .chat-b {
-      height: 100%;
-      width: 100vw;
-    
-    }
-    .notation-b {
-      height: 100%;
-      width: 100vw;
-     
-    }
-  }
-}
-
-.title {
-  font-family: "Quicksand", "Source Sans Pro", -apple-system, BlinkMacSystemFont,
-    "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-  display: block;
-  font-weight: 300;
-  font-size: 100px;
-  color: #35495e;
-  letter-spacing: 10px;
-}
-
-.subtitle {
-  font-weight: 300;
-  font-size: 42px;
-  color: #526488;
-  word-spacing: 5px;
-  padding-bottom: 15px;
-}
-
-.links {
-  padding-top: 15px;
 }
 </style>

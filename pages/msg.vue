@@ -2,7 +2,7 @@
  * @Description: 主页
  * @Author: chenchen
  * @Date: 2019-05-02 19:47:28
- * @LastEditTime: 2019-06-02 01:02:42
+ * @LastEditTime: 2019-06-02 23:03:42
  -->
 <template>
   <CubePage>
@@ -120,7 +120,10 @@ export default {
   },
   mounted() {
 
-    console.log(this.$socket.id);
+    this.$socket.on('receiveMsg',(data)=>{
+      console.log(data);
+      
+    })
 
     let style = window.getComputedStyle(
       document.querySelector(".header-b"),
