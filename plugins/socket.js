@@ -7,10 +7,11 @@
 import Vue from 'vue';
 import io from 'socket.io-client'
 
-const socket=io('ws://localhost:3000'); 
+const socket = io();
 
 let main = {
     install(Vue) {
+
         Vue.prototype.$socket = socket// 变量的内容 后期可以在vue中 this->$api.xxx 使用
     }
 }
