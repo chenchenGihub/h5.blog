@@ -46,7 +46,7 @@
   },
   "devDependencies": {
     "@fortawesome/fontawesome-free": "^5.8.1",
-    "node-sass": "^4.12.0",
+    "node-sass": "^4.13.1",
     "nodemon": "^1.18.9",
     "sass-loader": "^7.1.0",
     "webpack-transform-modules-plugin": "^0.4.3"
